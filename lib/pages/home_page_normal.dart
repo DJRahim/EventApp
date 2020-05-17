@@ -1,8 +1,18 @@
 import 'package:eventapp/classes/event.dart';
+import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:uic/list_uic.dart';
+
+// Cette page est la home page de l'utilisateur normale
+// Ca contient une liste des evenements recommandes (pour l'instant seulement une liste de test)
+// il y a l'acces vers :
+// 1- la page de recherche via le bouton situe en haut adroite (avec icon de recherche)
+// 2- au menu des parametres via le bouton situe en haut agauche
+// Ce menu pour l'instant contient :
+// 1- un bouton pour se deconnecter
+// ...
 
 class MyHomePageNormal extends StatefulWidget {
   MyHomePageNormal({Key key, this.title}) : super(key: key);
@@ -103,5 +113,12 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
     );
   }
 
-  void logout() {}
+  void logout() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
+        ModalRoute.withName('/'));
+
+    // le traitement de la deconnexion pas encore programme
+  }
 }

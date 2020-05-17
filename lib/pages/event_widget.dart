@@ -1,9 +1,10 @@
 import 'dart:async';
-
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// Cette page est pour l'affichage d'un evenement avec tous ses infos (nom, dates, lieu, description ...)
 
 class EventWidget extends StatefulWidget {
   EventWidget({Key key, this.title}) : super(key: key);

@@ -31,7 +31,6 @@ dependencies:
   uic: ^0.3.3
   connectivity: ^0.4.8+2
   provider: ^4.0.5+1
-  form_builder_map_field: ^0.0.1
 
   firebase_auth: ^0.16.0
   firebase_core: ^0.4.4+3

@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:eventapp/auth.dart' as auth;
 
+// Cette page est pour la connexion de tous les utilisateurs par email et password
+// Donc c'est une forme simple avec 2 champs de saisie et 2 bouttons
+// 1- pour reinitialiser les champs
+// 2- pour valider et envoyer
+
 class ConnectPage extends StatefulWidget {
   ConnectPage({Key key, this.title}) : super(key: key);
 
@@ -15,10 +20,12 @@ class ConnectPage extends StatefulWidget {
 class ConnectPageState extends State<ConnectPage> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
+// La methode qui permet de reinitialiser les champs
   void _reset() {
     _formKey.currentState.reset();
   }
 
+// la mathode qui permet de valider et envoyer les champs a l'api
   void _confirm() async {
     if (_formKey.currentState.saveAndValidate()) {
       print(_formKey.currentState.value);

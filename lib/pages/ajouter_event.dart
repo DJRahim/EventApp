@@ -2,7 +2,8 @@ import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:form_builder_map_field/form_builder_map_field.dart';
+
+// Cette page est pour l'ajout des evenements (donc specifique au publieurs)
 
 class AjouterEvent extends StatefulWidget {
   AjouterEvent({Key key, this.title}) : super(key: key);
@@ -16,11 +17,8 @@ class AjouterEvent extends StatefulWidget {
 class AjouterEventState extends State<AjouterEvent> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  final _cont1 = TextEditingController();
-  final _cont2 = TextEditingController();
-  final _cont3 = TextEditingController();
-  final _cont4 = TextEditingController();
-  final _cont5 = TextEditingController();
+  // Tout simplement ca contient une forme (FormBuilder) avec tout les champs necessaire pour la creation
+  // d'un evenement (encours de developpement)
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +39,6 @@ class AjouterEventState extends State<AjouterEvent> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     FormBuilderTextField(
-                      // controller: _cont1,
                       attribute: "nom",
                       decoration: theme("nom"),
                       validators: [
@@ -51,7 +48,6 @@ class AjouterEventState extends State<AjouterEvent> {
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
-                      // controller: _cont2,
                       attribute: "nom_organisateur",
                       decoration: theme("nom de l'organisateur"),
                       validators: [
@@ -94,16 +90,9 @@ class AjouterEventState extends State<AjouterEvent> {
                       ),
                     ),
                     SizedBox(height: 15),
-                    FormBuilderMapField(
-                      attribute: 'lieu',
-                      decoration:
-                          InputDecoration(labelText: 'Selectinner le lieu'),
-                      markerIconColor: Colors.red,
-                      markerIconSize: 50,
-                    ),
+                    Container(),
                     SizedBox(height: 15),
                     FormBuilderTextField(
-                      // controller: _cont3,
                       keyboardType: TextInputType.number,
                       attribute: "nb_place_dispo",
                       decoration: theme("Nembre de place disponible"),
@@ -114,7 +103,6 @@ class AjouterEventState extends State<AjouterEvent> {
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
-                      // controller: _cont3,
                       keyboardType:
                           TextInputType.numberWithOptions(decimal: false),
                       attribute: "prix",
@@ -128,7 +116,6 @@ class AjouterEventState extends State<AjouterEvent> {
                     Text("Contact"),
                     SizedBox(height: 15),
                     FormBuilderTextField(
-                      // controller: _cont4,
                       attribute: "e-mail",
                       decoration: theme("e-mail"),
                       validators: [
@@ -140,7 +127,6 @@ class AjouterEventState extends State<AjouterEvent> {
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
-                      // controller: _cont4,
                       attribute: "numero",
                       keyboardType: TextInputType.number,
                       decoration: theme("numero de telephone"),
@@ -151,7 +137,6 @@ class AjouterEventState extends State<AjouterEvent> {
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
-                      // controller: _cont4,
                       attribute: "url",
                       decoration: theme("lien"),
                       validators: [

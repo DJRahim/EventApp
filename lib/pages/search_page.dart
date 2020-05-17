@@ -6,6 +6,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:uic/list_uic.dart';
 import 'package:intl/intl.dart';
 
+// Ceci est la page de recherche
+// Elle permet d'effectuer des recherche avec filtrage
+// pour l'instant rahi khalota ghir chouf hadja wa7doukhra
+
 class SearchPage extends StatefulWidget {
   SearchPage({Key key, this.title}) : super(key: key);
 

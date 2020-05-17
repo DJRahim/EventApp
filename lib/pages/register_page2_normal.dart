@@ -2,6 +2,10 @@ import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+// Cette page contient la 2eme forme pour les infos supplementaire (pour l'utilisateur normale)
+// elle contient les champs :
+// Nom, Prenom, age, sexe, profession, (Pas encore finis)
+
 class RegisterPage2 extends StatefulWidget {
   RegisterPage2({Key key, this.title}) : super(key: key);
 

@@ -6,6 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+// Ceci est un ensemble methodes et variables pour effectuer des requetes get et post
+// et pour gerer l'authentification
+// Peut etre ca contient des methodes ou des variables qu'on n'a pas besoin (pour l'instant)
+
 // the unique ID of the application
 const String _applicationId = "my_application_id";
 

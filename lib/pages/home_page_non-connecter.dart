@@ -1,11 +1,14 @@
 import 'dart:async';
-
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/widgets.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:uic/list_uic.dart';
+
+// Cette page est pour afficher l'historique des evenements (en cas de non connexion internet)
+// Donc ca contient juste une liste des evenements (si on clique sur, ca affiche
+// une page contenant tout les infos de cet evenement)
+// Remarque: Ca contient une liste generer manuellement pour tester seulement
 
 class NoConnection extends StatefulWidget {
   NoConnection({Key key, this.title}) : super(key: key);
@@ -17,15 +20,14 @@ class NoConnection extends StatefulWidget {
 }
 
 class NoConnectionState extends State<NoConnection> {
-  // final FirebaseMessaging _fcm = new FirebaseMessaging();
-
-  // StreamSubscription iosSubscription;
-
   ListUicController<Event> uic;
 
   List<Event> listevent = List<Event>();
 
   void initlist() {
+    listevent.add(e);
+    listevent.add(e);
+    listevent.add(e);
     listevent.add(e);
     listevent.add(e);
     listevent.add(e);
@@ -58,47 +60,6 @@ class NoConnectionState extends State<NoConnection> {
     initlist();
     initlist();
     initlist();
-
-    // if (Platform.isIOS) {
-    //   iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
-    //     // save the token  OR subscribe to a topic here
-    //   });
-
-    //   _fcm.requestNotificationPermissions(IosNotificationSettings());
-    // }
-
-    // _fcm.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print("onMessage: $message");
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => AlertDialog(
-    //         content: ListTile(
-    //           title: Text(message['notification']['title']),
-    //           subtitle: Text(message['notification']['bSERbess1991ody']),
-    //         ),
-    //         actions: <Widget>[
-    //           FlatButton(
-    //             child: Text('Ok'),
-    //             onPressed: () => Navigator.of(context).pop(),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     print("onLaunch: $message");
-    //     // TODO optional
-    //   },
-    //   onResume: (Map<String, dynamic> message) async {
-    //     print("onResume: $message");
-    //     // TODO optional
-    //   },
-    // );
-    // _fcm.getToken().then((String token) {
-    //   assert(token != null);
-    //   print(token);
-    // });
   }
 
   Event e = new Event(

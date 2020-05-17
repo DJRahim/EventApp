@@ -1,6 +1,13 @@
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 
+// Ca est la home page pour les utilisateurs qui ne sont pas connecter
+// Ca contient 2 boutons (1 pour connexion et 1 pour inscription)
+// Il y a l'acces vers :
+// 1- la page de recherche via le bouton situe en haut adroite (avec icon de recherche)
+// 2- au menu des parametres via le bouton situe en haut agauche
+// Ce menu contient la meme chose que la home page (pour l'instant)
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 

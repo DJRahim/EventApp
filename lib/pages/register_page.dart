@@ -3,6 +3,13 @@ import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+// Cette page contient une forme pour l'insciption des utilisateurs (normals et publieurs)
+// Ca contient un champs pour le type de l'utilisateur, un email et un password
+// et en plus 2 boutons, un pour reinitialiser les champs et un pour valider et envoyer
+// apres validation l'utilisateur passe a une uatre forme (selon son type)
+// pour remplire des infos supplementaire (la 2eme forme pour l'utilisateur normale est presaue finis
+// et pour le publieur pas encore developper)
+
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key, this.title}) : super(key: key);
 
@@ -21,12 +28,14 @@ class RegisterPageState extends State<RegisterPage> {
   var value = "Utilisateur normale";
   int a = 0;
 
+  // une methode pour reinitialiser la forme
   void _reset() {
     _formKey.currentState.reset();
     _cont1.clear();
     _cont2.clear();
   }
 
+  // une methode pour valider et envoyer
   void _confirm() async {
     if (_formKey.currentState.saveAndValidate()) {
       Map<String, String> c = Map<String, String>();

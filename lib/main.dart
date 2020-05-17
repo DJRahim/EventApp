@@ -9,17 +9,16 @@ import 'package:eventapp/pages/home_page_non-connecter.dart';
 import 'package:eventapp/pages/home_page_normal.dart';
 import 'package:eventapp/pages/home_page_publieur.dart';
 import 'package:eventapp/pages/register_page.dart';
-import 'package:eventapp/pages/register_page2.dart';
+import 'package:eventapp/pages/register_page2_normal.dart';
 import 'package:eventapp/pages/search_page.dart';
 import 'package:eventapp/widgets.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// import 'auth.dart' as auth;
+// Ceci est la page root de l'application (chaque fois l'application s,ouvre, ca passe par cette page)
 
 void main() {
-  // var h = auth.handShake();
-
   runApp(RootPage());
 }
 
@@ -35,32 +34,76 @@ class RootPageState extends State<RootPage> {
 
   StreamSubscription connectivitySubscription;
 
+  // final FirebaseMessaging _fcm = new FirebaseMessaging();
+
+  // StreamSubscription iosSubscription;
+
   var status;
   Widget home = new AjouterEvent();
 
+// Ca c'est juste une methode pour le bouton quitter
   void quit() {
     SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
   }
 
+// Ca c'est une methode pour aller a la page NoConnection (en cas ou il n'y a pas de connection) qui contient l'historique des evenements
   void history() {
     nav.currentState.push(
         MaterialPageRoute(builder: (BuildContext context) => NoConnection()));
   }
 
-  void retry() {
-    connectivitySubscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult connectivityResult) {
-      if (connectivityResult != ConnectivityResult.none) {
-        nav.currentState.push(
-            MaterialPageRoute(builder: (BuildContext context) => RootPage()));
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
+
+    // Ca c'est pour gerer les notifications (c'est en commentaire pour tester d'autres fonctionnalites)
+
+    // if (Platform.isIOS) {
+    //   iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+    //     // save the token  OR subscribe to a topic here
+    //   });
+
+    //   _fcm.requestNotificationPermissions(IosNotificationSettings());
+    // }
+
+    // _fcm.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("onMessage: $message");
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) => AlertDialog(
+    //         content: ListTile(
+    //           title: Text(message['notification']['title']),
+    //           subtitle: Text(message['notification']['bSERbess1991ody']),
+    //         ),
+    //         actions: <Widget>[
+    //           FlatButton(
+    //             child: Text('Ok'),
+    //             onPressed: () => Navigator.of(context).pop(),
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     print("onLaunch: $message");
+    //     // TODO optional
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     print("onResume: $message");
+    //     // TODO optional
+    //   },
+    // );
+    // _fcm.getToken().then((String token) {
+    //   assert(token != null);
+    //   print(token);
+    // });
+
+    // Ca c'est pour gerer la connectivite (s'il y a l'internet ou non)
+    // S'il y a de l'internet ca passe au home page
+    // Sinon une page s'affiche qui dise 'Pas de connexion' avec 2 possibilites
+    // 1- Quitter
+    // 2- Voir l'historique des evenements (ils sont stockes dans la base de donnees de l'app)
 
     connectivitySubscription = Connectivity()
         .onConnectivityChanged
@@ -109,11 +152,16 @@ class RootPageState extends State<RootPage> {
                   ),
                 )));
       } else {
+        // apres la verification de la connectivity, on verifie quel home page a afficher avec la fonction
+        // handshake()
+
         //status = handshake();
 
         nav.currentState.push(
             MaterialPageRoute(builder: (BuildContext context) => RootPage()));
       }
+      // on utilise le status pour choisir le home page adequat
+
       switch (status) {
         case 'NonCompte':
           home = new MyHomePage();
@@ -145,6 +193,7 @@ class RootPageState extends State<RootPage> {
       navigatorKey: nav,
       home: home,
       routes: {
+        // La liste de tout les pages de l'application
         '/Non-connecte': (context) => NoConnection(),
         '/Non-compte': (context) => MyHomePage(),
         '/normal': (context) => MyHomePageNormal(),

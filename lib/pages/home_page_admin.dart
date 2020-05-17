@@ -1,6 +1,8 @@
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 
+// Ceci est la home page de l'admin (pas encore developper)
+
 class MyHomePageAdmin extends StatefulWidget {
   MyHomePageAdmin({Key key, this.title}) : super(key: key);
 

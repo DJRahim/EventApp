@@ -5,6 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:uic/list_uic.dart';
 
+// Ceci est la home page du publieur
+// Ca contient la liste de ces evenements (pour l'instant juste une liste de test)
+// et un bouton pour l'ajout d'un evenement
+// Il y a l'acces vers :
+// 1- une forme pour l'ajout des evenements
+// 2- la page de recherche via le bouton situe en haut adroite (avec icon de recherche)
+// 3- au menu des parametres via le bouton situe en haut agauche
+// Ce menu pour l'instant contient :
+// 1- un bouton pour se deconnecter
+// ...
+
 class MyHomePagePublieur extends StatefulWidget {
   MyHomePagePublieur({Key key, this.title}) : super(key: key);
 
@@ -28,6 +39,9 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
       "");
 
   void initlist() {
+    listevent.add(e);
+    listevent.add(e);
+    listevent.add(e);
     listevent.add(e);
     listevent.add(e);
     listevent.add(e);
@@ -102,6 +116,8 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
         context,
         MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
         ModalRoute.withName('/'));
+
+    // le traitement de la deconnexion pas encore programme
   }
 
   void action() {

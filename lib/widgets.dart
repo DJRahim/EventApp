@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uic/list_uic.dart';
 
-// Ceci est un widget pour les boutons
+// Ceci est un widget globale pour les boutons
 Material button(BuildContext context, String s, void action()) {
   return Material(
     elevation: 5.0,
@@ -33,7 +33,7 @@ InputDecoration theme(String s) {
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)));
 }
 
-// Ceci est un widget pour les champs de saisie
+// Ceci est un widget globale pour les champs de saisie
 TextFormField textField(String s1, String s2, TextEditingController a) {
   return TextFormField(
     obscureText: true,
@@ -128,7 +128,7 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
   );
 }
 
-// Ceci est un widget qui represente un event dans une liste
+// Ceci est un widget qui represente un evenement dans une liste
 
 Widget eventItem(Event e, BuildContext context) {
   return GestureDetector(
@@ -214,6 +214,8 @@ dynamic posToLoc(double lat, double long) async {
   return addresses.first;
 }
 
+// Ca est le menu des parametres
+
 Widget drawer(BuildContext context, {List<Widget> listWidget}) {
   return Drawer(
       child: Scaffold(
@@ -228,7 +230,7 @@ Widget drawer(BuildContext context, {List<Widget> listWidget}) {
   ));
 }
 
-// Ceci est pour le filtrage des recherche
+// Ceci est pour le filtrage des recherche pas encore finis (ca contient des problemes)
 Widget menu(List listtype) {
   return FormBuilder(
       child: Column(
