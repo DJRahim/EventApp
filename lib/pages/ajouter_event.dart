@@ -1,7 +1,9 @@
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
 
 // Cette page est pour l'ajout des evenements (donc specifique au publieurs)
 
@@ -16,6 +18,8 @@ class AjouterEvent extends StatefulWidget {
 
 class AjouterEventState extends State<AjouterEvent> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+
+  LocationResult place;
 
   // Tout simplement ca contient une forme (FormBuilder) avec tout les champs necessaire pour la creation
   // d'un evenement (encours de developpement)
@@ -59,23 +63,17 @@ class AjouterEventState extends State<AjouterEvent> {
                     FormBuilderDateTimePicker(
                       attribute: "heure_debut",
                       inputType: InputType.time,
-                      decoration: InputDecoration(
-                        labelText: "Heure debut de l'evenement",
-                      ),
+                      decoration: theme("Heure debut de l'evenement"),
                       validator: (val) => null,
                       initialTime: TimeOfDay(hour: 8, minute: 0),
-                      initialValue: DateTime.now(),
                     ),
                     SizedBox(height: 15),
                     FormBuilderDateTimePicker(
                       attribute: "heur_fin",
                       inputType: InputType.time,
-                      decoration: InputDecoration(
-                        labelText: "Heure fin de l'evenement",
-                      ),
+                      decoration: theme("Heure fin de l'evenement"),
                       validator: (val) => null,
                       initialTime: TimeOfDay(hour: 17, minute: 0),
-                      initialValue: DateTime.now(),
                     ),
                     SizedBox(height: 15),
                     FormBuilderDateRangePicker(
@@ -83,14 +81,20 @@ class AjouterEventState extends State<AjouterEvent> {
                       firstDate: DateTime(1970),
                       lastDate: DateTime(2030),
                       format: DateFormat("dd-MM-yyyy"),
-                      decoration: InputDecoration(
-                        labelText: "Date Range",
-                        helperText: "Helper text",
-                        hintText: "Hint text",
-                      ),
+                      decoration: theme("date debut et fin"),
                     ),
                     SizedBox(height: 15),
-                    Container(),
+                    button(context, "selectionner un lieu", () async {
+                      var result = await showLocationPicker(
+                        context,
+                        "AIzaSyCdT5Sdo4Gn6i725HrgD2phksfORE-Rw2s",
+                        initialCenter: LatLng(36.7538, 3.0588),
+                        myLocationButtonEnabled: true,
+                        layersButtonEnabled: true,
+                        resultCardAlignment: Alignment.bottomCenter,
+                      );
+                      setState(() => place = result);
+                    }),
                     SizedBox(height: 15),
                     FormBuilderTextField(
                       keyboardType: TextInputType.number,
@@ -173,6 +177,7 @@ class AjouterEventState extends State<AjouterEvent> {
       Map<String, dynamic> c = Map.from(_formKey.currentState.value);
 
       print(c);
+      print(place);
     }
   }
 }

@@ -31,6 +31,7 @@ dependencies:
   uic: ^0.3.3
   connectivity: ^0.4.8+2
   provider: ^4.0.5+1
+  google_map_location_picker: ^3.3.1
 
   firebase_auth: ^0.16.0
   firebase_core: ^0.4.4+3
