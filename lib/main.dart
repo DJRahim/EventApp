@@ -17,6 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Ceci est la page root de l'application (chaque fois l'application s,ouvre, ca passe par cette page)
+// Pour l'instant ca affiche 4 boutons (pour tester):
+// 1- pour passer a la page de non connection
+// 2- pour passer a la page de pas de compte
+// 1- pour passer a la page d'utilisateur normale
+// 1- pour passer a la page du publieur d'evenements
+// 1- pour passer a la page d'admin de l'app
 
 void main() {
   runApp(RootPage());
@@ -39,7 +45,7 @@ class RootPageState extends State<RootPage> {
   // StreamSubscription iosSubscription;
 
   var status;
-  Widget home = new AjouterEvent();
+  Widget home;
 
 // Ca c'est juste une methode pour le bouton quitter
   void quit() {
@@ -191,7 +197,53 @@ class RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: nav,
-      home: home,
+      home: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              onPressed: () {
+                nav.currentState.push(MaterialPageRoute(
+                    builder: (BuildContext context) => NoConnection()));
+              },
+              child: Text("Page pas de connexion"),
+            ),
+            SizedBox(height: 20),
+            RaisedButton(
+              onPressed: () {
+                nav.currentState.push(MaterialPageRoute(
+                    builder: (BuildContext context) => MyHomePage()));
+              },
+              child: Text("Page pas de compte"),
+            ),
+            SizedBox(height: 20),
+            RaisedButton(
+              onPressed: () {
+                nav.currentState.push(MaterialPageRoute(
+                    builder: (BuildContext context) => MyHomePageNormal()));
+              },
+              child: Text("Pge utilisateur normal"),
+            ),
+            SizedBox(height: 20),
+            RaisedButton(
+              onPressed: () {
+                nav.currentState.push(MaterialPageRoute(
+                    builder: (BuildContext context) => MyHomePagePublieur()));
+              },
+              child: Text("Page publieur"),
+            ),
+            SizedBox(height: 20),
+            RaisedButton(
+              onPressed: () {
+                nav.currentState.push(MaterialPageRoute(
+                    builder: (BuildContext context) => MyHomePageAdmin()));
+              },
+              child: Text("Page admin"),
+            )
+          ],
+        ),
+      ),
       routes: {
         // La liste de tout les pages de l'application
         '/Non-connecte': (context) => NoConnection(),
