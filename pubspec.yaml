@@ -20,23 +20,23 @@ dependencies:
   flutter:
     sdk: flutter
 
-  http: ^0.12.0+4
-  device_info: ^0.4.2+2
-  shared_preferences: ^0.5.7
+  http: ^0.12.1
+  device_info: ^0.4.2+4
+  shared_preferences: ^0.5.7+2
   geolocator: ^5.3.1
-  flutter_form_builder: ^3.10.0
-  google_maps_flutter: ^0.5.26+4
+  flutter_form_builder: ^3.10.1
+  google_maps_flutter: ^0.5.27+3
   location: ^3.0.2
   geocoder: ^0.2.1
-  uic: ^0.3.3
-  connectivity: ^0.4.8+2
-  provider: ^4.0.5+1
+  uic: ^0.4.2
+  connectivity: ^0.4.8+6
+  provider: ^4.1.2
   google_map_location_picker: ^3.3.1
 
   firebase_auth: ^0.16.0
   firebase_core: ^0.4.4+3
   firebase_analytics: any
-  firebase_messaging: ^6.0.13
+  firebase_messaging: ^6.0.15
 
 
 

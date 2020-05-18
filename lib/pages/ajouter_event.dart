@@ -25,12 +25,15 @@ class AjouterEventState extends State<AjouterEvent> {
   // d'un evenement (encours de developpement)
 
   @override
+  void dispose() {
+    super.dispose();
+    _formKey.currentState.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 8,
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.all(15),
         child: SingleChildScrollView(
@@ -163,7 +166,13 @@ class AjouterEventState extends State<AjouterEvent> {
                       ),
                     ),
                     SizedBox(height: 15),
-                    button(context, "Confirmer", _confirm),
+                    Row(
+                      children: <Widget>[
+                        button(context, "Confirmer", _confirm),
+                        SizedBox(height: 15),
+                        button(context, "effacer", _reset),
+                      ],
+                    ),
                   ],
                 )),
           ),
@@ -179,5 +188,9 @@ class AjouterEventState extends State<AjouterEvent> {
       print(c);
       print(place);
     }
+  }
+
+  void _reset() {
+    _formKey.currentState.reset();
   }
 }

@@ -34,10 +34,7 @@ class EventWidgetState extends State<EventWidget> {
         draggable: false,
         position: LatLng(e.pos.latitude, e.pos.longitude)));
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 10,
-        ),
+        appBar: AppBar(),
         body: Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(

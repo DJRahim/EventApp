@@ -41,11 +41,6 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
     listevent.add(e);
     listevent.add(e);
     listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
   }
 
   Future<List<Event>> _getItems(int page) async {
@@ -89,9 +84,7 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
         ),
       ]),
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: Text("Evenements culturels"),
-        elevation: 10,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.search),
@@ -101,14 +94,8 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            listEvent(uic, context),
-          ],
-        ),
+        padding: const EdgeInsets.all(8.0),
+        child: listEvent(uic, context),
       ),
     );
   }

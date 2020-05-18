@@ -18,24 +18,13 @@ class RegisterPage2 extends StatefulWidget {
 class _RegisterPage2State extends State<RegisterPage2> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  final _cont1 = TextEditingController();
-  final _cont2 = TextEditingController();
-  final _cont3 = TextEditingController();
-
   void reset() {
-    _cont1.clear();
-    _cont2.clear();
-    _cont3.clear();
+    _formKey.currentState.reset();
   }
 
   void confirm() {
     if (_formKey.currentState.saveAndValidate()) {
       var c = Map<String, String>.from(_formKey.currentState.value);
-
-      c.remove('nom');
-      c.remove('prenom');
-      c.remove('age');
-      c.addAll({'nom': _cont1.text, 'prenom': _cont2.text, 'age': _cont3.text});
 
       print(c);
     } else {
@@ -47,18 +36,13 @@ class _RegisterPage2State extends State<RegisterPage2> {
   @override
   void dispose() {
     super.dispose();
-    _cont1.dispose();
-    _cont2.dispose();
-    _cont3.dispose();
+    _formKey.currentState.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.all(0),
         child: SingleChildScrollView(
@@ -75,7 +59,6 @@ class _RegisterPage2State extends State<RegisterPage2> {
                       children: <Widget>[
                         SizedBox(height: 20.0),
                         FormBuilderTextField(
-                          controller: _cont1,
                           attribute: "nom",
                           decoration: theme("Nom"),
                           validators: [
@@ -85,7 +68,6 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         ),
                         SizedBox(height: 20.0),
                         FormBuilderTextField(
-                          controller: _cont2,
                           attribute: "prenom",
                           decoration: theme("Prenom"),
                           validators: [
@@ -95,7 +77,6 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         ),
                         SizedBox(height: 20.0),
                         FormBuilderTextField(
-                          controller: _cont3,
                           keyboardType: TextInputType.number,
                           attribute: "age",
                           decoration: theme("Age"),

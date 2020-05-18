@@ -1,4 +1,4 @@
-import 'package:eventapp/auth.dart' as auth;
+// import 'package:eventapp/auth.dart' as auth;
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -22,25 +22,17 @@ class RegisterPage extends StatefulWidget {
 class RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  final _cont1 = TextEditingController();
-  final _cont2 = TextEditingController();
-
   var value = "Utilisateur normale";
-  int a = 0;
 
   // une methode pour reinitialiser la forme
   void _reset() {
     _formKey.currentState.reset();
-    _cont1.clear();
-    _cont2.clear();
   }
 
   // une methode pour valider et envoyer
   void _confirm() async {
     if (_formKey.currentState.saveAndValidate()) {
-      Map<String, String> c = Map<String, String>();
-
-      c.addAll({'type': '$a', 'email': _cont1.text, 'password': _cont2.text});
+      Map<String, String> c = Map.from(_formKey.currentState.value);
 
       // var v = await auth.getRequest("s_inscrire", c);
       print(c);
@@ -55,17 +47,12 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     super.dispose();
-    _cont1.dispose();
-    _cont2.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.all(0),
         child: SingleChildScrollView(
@@ -85,30 +72,20 @@ class RegisterPageState extends State<RegisterPage> {
                           attribute: "type",
                           options: [
                             FormBuilderFieldOption(
-                              value: "Utilisateur normal",
+                              value: "normal",
                               child: Text("Utilisateur normal"),
                             ),
                             FormBuilderFieldOption(
-                                value: "publieur d'evenements",
+                                value: "publieur",
                                 child: Text("publieur d'evenements")),
                           ],
                           validators: [
                             FormBuilderValidators.required(
                                 errorText: "Svp selectionnez un type")
                           ],
-                          onChanged: (b) {
-                            setState(() {
-                              if (b == "Utilisateur normale") {
-                                a = 0;
-                              } else {
-                                a = 1;
-                              }
-                            });
-                          },
                         ),
                         SizedBox(height: 20.0),
                         FormBuilderTextField(
-                          controller: _cont1,
                           attribute: "e-mail",
                           decoration: theme("e-mail"),
                           validators: [
@@ -120,7 +97,6 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                         SizedBox(height: 20.0),
                         FormBuilderTextField(
-                          controller: _cont2,
                           obscureText: true,
                           maxLines: 1,
                           attribute: "password",

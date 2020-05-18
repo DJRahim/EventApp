@@ -11,7 +11,7 @@ Material button(BuildContext context, String s, void action()) {
   return Material(
     elevation: 5.0,
     borderRadius: BorderRadius.circular(30.0),
-    color: Colors.blueAccent,
+    color: Colors.lightBlue[800],
     child: MaterialButton(
       minWidth: MediaQuery.of(context).size.width,
       padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -30,7 +30,9 @@ InputDecoration theme(String s) {
   return InputDecoration(
       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
       labelText: s,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)));
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(32.0),
+      ));
 }
 
 // Ceci est un widget globale pour les champs de saisie
@@ -131,56 +133,61 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
 // Ceci est un widget qui represente un evenement dans une liste
 
 Widget eventItem(Event e, BuildContext context) {
-  return GestureDetector(
-    child: Card(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: 390,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10.0),
-                  Text(e.nom,
-                      style:
-                          TextStyle(fontSize: 19, fontWeight: FontWeight.w500)),
-                  SizedBox(height: 10.0),
-                  Text(e.lieu,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                  SizedBox(height: 15.0),
-                ],
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+  return Column(
+    children: <Widget>[
+      GestureDetector(
+        child: Card(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: 10.0),
-                Text('De: ' + DateFormat('y/d/M').format(e.dateDebut),
-                    style:
-                        TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
-                SizedBox(height: 20.0),
-                Text('  A: ' + DateFormat('y/d/M').format(e.dateFin),
-                    style:
-                        TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
+                Container(
+                  width: 390,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 10.0),
+                      Text(e.nom,
+                          style: TextStyle(
+                              fontSize: 19, fontWeight: FontWeight.w500)),
+                      SizedBox(height: 10.0),
+                      Text(e.lieu,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500)),
+                      SizedBox(height: 15.0),
+                    ],
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 10.0),
+                    Text('De: ' + DateFormat('y/d/M').format(e.dateDebut),
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w500)),
+                    SizedBox(height: 20.0),
+                    Text('  A: ' + DateFormat('y/d/M').format(e.dateFin),
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+                SizedBox(height: 15.0),
               ],
             ),
-            SizedBox(height: 15.0),
-          ],
+          ),
+          elevation: 5,
         ),
+        onTap: () {
+          Navigator.pushNamed(context, '/event', arguments: e);
+        },
       ),
-      elevation: 5,
-    ),
-    onTap: () {
-      Navigator.pushNamed(context, '/event', arguments: e);
-    },
+      SizedBox(height: 5)
+    ],
   );
 }
 
@@ -190,9 +197,7 @@ Widget listEvent(ListUicController<Event> uic, BuildContext context) {
   return ListUic<Event>(
     controller: uic,
     itemBuilder: (item) {
-      return Column(
-        children: <Widget>[eventItem(item, context), SizedBox(height: 5)],
-      );
+      return eventItem(item, context);
     },
     emptyProgressText: "",
     emptyDataIcon: Icon(Icons.refresh, size: 52.0, color: Colors.teal[200]),
@@ -219,10 +224,7 @@ dynamic posToLoc(double lat, double long) async {
 Widget drawer(BuildContext context, {List<Widget> listWidget}) {
   return Drawer(
       child: Scaffold(
-    appBar: AppBar(
-      elevation: 8,
-      backgroundColor: Colors.white,
-    ),
+    appBar: AppBar(),
     body: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: listWidget,
@@ -230,53 +232,14 @@ Widget drawer(BuildContext context, {List<Widget> listWidget}) {
   ));
 }
 
-// Ceci est pour le filtrage des recherche pas encore finis (ca contient des problemes)
-Widget menu(List listtype) {
-  return FormBuilder(
-      child: Column(
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          FormBuilderDropdown(
-            attribute: "Type",
-            decoration: theme("Type de l'evenement"),
-            hint: Text('Selectionner type'),
-            validators: [FormBuilderValidators.required()],
-            items: listtype
-                .map((value) =>
-                    DropdownMenuItem(value: value, child: Text("$value")))
-                .toList(),
-          ),
-          FormBuilderDropdown(
-            attribute: "Sous-type",
-            decoration: theme("Sous-type de l'evenement"),
-            hint: Text('Selectionner type'),
-            validators: [FormBuilderValidators.required()],
-            items: listtype
-                .map((value) =>
-                    DropdownMenuItem(value: value, child: Text("$value")))
-                .toList(),
-          ),
-        ],
-      ),
-      FormBuilderChoiceChip(
-        attribute: "date",
-        options: [
-          FormBuilderFieldOption(child: Text("Aujourd'hui"), value: "today"),
-          FormBuilderFieldOption(child: Text("Demain"), value: "tomorrow"),
-          FormBuilderFieldOption(
-              child: Text("Prochaine semaine"), value: "next_week"),
-          FormBuilderFieldOption(
-              child: Text("Prochaine mois"), value: "next_month"),
-        ],
-        validators: [FormBuilderValidators.required()],
-      ),
-      FormBuilderDateTimePicker(
-        attribute: "date",
-        inputType: InputType.date,
-        format: DateFormat("dd-MM-yyyy"),
-        decoration: theme("ou choisir une date"),
-      )
-    ],
-  ));
+// Ceci est une barre qui s'affiche en bas et qui contient un message
+SnackBar snackBar(String text, Color col) {
+  return SnackBar(
+    content: Text(text),
+    action: SnackBarAction(
+      label: '',
+      onPressed: () {},
+    ),
+    backgroundColor: col,
+  );
 }

@@ -40,8 +40,6 @@ class MyHomePageState extends State<MyHomePage> {
       ),
       appBar: AppBar(
         title: Text("Evenements culturels"),
-        backgroundColor: Colors.white,
-        elevation: 8,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.search),

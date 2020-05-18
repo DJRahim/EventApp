@@ -223,7 +223,7 @@ class RootPageState extends State<RootPage> {
                 nav.currentState.push(MaterialPageRoute(
                     builder: (BuildContext context) => MyHomePageNormal()));
               },
-              child: Text("Pge utilisateur normal"),
+              child: Text("Page utilisateur normal"),
             ),
             SizedBox(height: 20),
             RaisedButton(
@@ -262,9 +262,12 @@ class RootPageState extends State<RootPage> {
       title: 'Event App',
       // Definir un theme globale pour l'application
       theme: ThemeData(
-        accentColor: Colors.white,
-        backgroundColor: Colors.white,
-        primaryColor: Colors.white,
+        primaryColor: Colors.lightBlue[800],
+        accentColor: Colors.cyan[600],
+
+        // Define the default font family.
+        fontFamily: 'Georgia',
+        appBarTheme: AppBarTheme(elevation: 8, color: Colors.lightBlue[800]),
       ),
     );
   }

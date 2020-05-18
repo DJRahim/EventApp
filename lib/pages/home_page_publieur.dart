@@ -89,7 +89,6 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
       ]),
       appBar: AppBar(
         title: Text("Evenements culturels"),
-        elevation: 10,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.search),
@@ -99,11 +98,13 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          alignment: Alignment.bottomRight,
+        padding: const EdgeInsets.all(7.0),
+        child: Column(
           children: <Widget>[
-            listEvent(uic, context),
+            Container(
+                height: MediaQuery.of(context).size.height * 0.84,
+                child: listEvent(uic, context)),
+            SizedBox(height: 7),
             button(context, "Ajouter evenement", action)
           ],
         ),

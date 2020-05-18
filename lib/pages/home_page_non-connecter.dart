@@ -75,8 +75,6 @@ class NoConnectionState extends State<NoConnection> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Liste event test"),
-        elevation: 10,
-        backgroundColor: Colors.white,
       ),
       body: listEvent(uic, context),
       backgroundColor: Colors.white,

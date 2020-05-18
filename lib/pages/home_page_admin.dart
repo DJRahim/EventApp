@@ -18,7 +18,6 @@ class MyHomePageAdminState extends State<MyHomePageAdmin> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Evenements culturels"),
-        elevation: 10,
         leading: IconButton(icon: Icon(Icons.menu), onPressed: _param),
         actions: <Widget>[
           IconButton(
@@ -56,6 +55,4 @@ class MyHomePageAdminState extends State<MyHomePageAdmin> {
   void _signup() {
     Navigator.pushNamed(context, '/inscription');
   }
-
-  
 }
