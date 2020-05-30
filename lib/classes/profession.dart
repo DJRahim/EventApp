@@ -1,0 +1,4 @@
+enum Profession {
+  Etudiant,
+  Enseignant,
+}

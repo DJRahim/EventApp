@@ -1,6 +1,5 @@
 import 'package:eventapp/classes/event.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -66,7 +65,7 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            height: 360,
+            height: 320,
             width: MediaQuery.of(context).size.width,
             child: GoogleMap(
               mapType: MapType.normal,
@@ -91,7 +90,7 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
                           "De:  " +
                               DateFormat.yMd().add_jm().format(e.dateDebut),
                           style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold)),
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(width: 15.0),
                       Text(
                           "A:  " +
@@ -99,7 +98,7 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
                                   .add_jm()
                                   .format(e.dateFin.add(new Duration(days: 5))),
                           style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold)),
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   ))),
           SizedBox(height: 20.0),
@@ -140,43 +139,53 @@ Widget eventItem(Event e, BuildContext context) {
           color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(2.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
               children: <Widget>[
-                Container(
-                  width: 390,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(height: 10.0),
-                      Text(e.nom,
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.w500)),
-                      SizedBox(height: 10.0),
-                      Text(e.lieu,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                      SizedBox(height: 15.0),
-                    ],
-                  ),
+                Image(
+                  image: AssetImage('assets/event.jpg'),
+                  height: 130,
+                  width: 200,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 10.0),
-                    Text('De: ' + DateFormat('y/d/M').format(e.dateDebut),
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500)),
-                    SizedBox(height: 20.0),
-                    Text('  A: ' + DateFormat('y/d/M').format(e.dateFin),
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500)),
+                    Container(
+                      width: 255,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: 10.0),
+                          Text(e.nom,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w600)),
+                          SizedBox(height: 10.0),
+                          Text(e.lieu,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w500)),
+                          SizedBox(height: 15.0),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(height: 10.0),
+                        Text('De: ' + DateFormat('y/d/M').format(e.dateDebut),
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w600)),
+                        SizedBox(height: 17.0),
+                        Text('  A: ' + DateFormat('y/d/M').format(e.dateFin),
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                    SizedBox(height: 15.0),
                   ],
                 ),
-                SizedBox(height: 15.0),
               ],
             ),
           ),

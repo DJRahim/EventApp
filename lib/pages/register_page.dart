@@ -1,4 +1,6 @@
-// import 'package:eventapp/auth.dart' as auth;
+import 'dart:convert';
+
+import 'package:eventapp/auth.dart' as auth;
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -34,14 +36,22 @@ class RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState.saveAndValidate()) {
       Map<String, String> c = Map.from(_formKey.currentState.value);
 
-      // var v = await auth.getRequest("s_inscrire", c);
       print(c);
+      var v = await auth.getRequest(
+          "auth/s_inscrire?type=${c['type']}&password=${c['password']}&email=${c['email']}",
+          c);
+      print(v);
 
-      Navigator.pushNamed(context, '/inscription2');
-    } else {
-      print(_formKey.currentState.value);
-      print("validation failed");
-    }
+      var k = jsonDecode(v);
+
+      if (k['message'] == 'email envoyer !!') {
+        if (c['type'] == '1') {
+          Navigator.pushNamed(context, '/inscription3');
+        } else {
+          Navigator.pushNamed(context, '/inscription2');
+        }
+      }
+    } else {}
   }
 
   @override
@@ -72,11 +82,11 @@ class RegisterPageState extends State<RegisterPage> {
                           attribute: "type",
                           options: [
                             FormBuilderFieldOption(
-                              value: "normal",
+                              value: "2",
                               child: Text("Utilisateur normal"),
                             ),
                             FormBuilderFieldOption(
-                                value: "publieur",
+                                value: "1",
                                 child: Text("publieur d'evenements")),
                           ],
                           validators: [
@@ -86,7 +96,7 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                         SizedBox(height: 20.0),
                         FormBuilderTextField(
-                          attribute: "e-mail",
+                          attribute: "email",
                           decoration: theme("e-mail"),
                           validators: [
                             FormBuilderValidators.email(

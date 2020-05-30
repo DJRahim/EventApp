@@ -10,6 +10,7 @@ import 'package:eventapp/pages/home_page_normal.dart';
 import 'package:eventapp/pages/home_page_publieur.dart';
 import 'package:eventapp/pages/register_page.dart';
 import 'package:eventapp/pages/register_page2_normal.dart';
+import 'package:eventapp/pages/register_page3_publieur.dart';
 import 'package:eventapp/pages/search_page.dart';
 import 'package:eventapp/widgets.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
@@ -254,6 +255,7 @@ class RootPageState extends State<RootPage> {
         '/connection': (context) => ConnectPage(),
         '/inscription': (context) => RegisterPage(),
         '/inscription2': (context) => RegisterPage2(),
+        '/inscription3': (context) => RegisterPage3(),
         '/search': (context) => SearchPage(),
         '/event': (context) => EventWidget(),
         '/Ajouter-event': (context) => AjouterEvent()

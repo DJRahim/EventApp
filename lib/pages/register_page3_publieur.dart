@@ -1,5 +1,3 @@
-import 'package:eventapp/classes/profession.dart';
-import 'package:eventapp/classes/sexe.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -8,16 +6,16 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 // elle contient les champs :
 // Nom, Prenom, age, sexe, profession, (Pas encore finis)
 
-class RegisterPage2 extends StatefulWidget {
-  RegisterPage2({Key key, this.title}) : super(key: key);
+class RegisterPage3 extends StatefulWidget {
+  RegisterPage3({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _RegisterPage2State createState() => _RegisterPage2State();
+  _RegisterPage3State createState() => _RegisterPage3State();
 }
 
-class _RegisterPage2State extends State<RegisterPage2> {
+class _RegisterPage3State extends State<RegisterPage3> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   void reset() {
@@ -79,38 +77,14 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         ),
                         SizedBox(height: 20.0),
                         FormBuilderTextField(
-                          keyboardType: TextInputType.number,
-                          attribute: "age",
-                          decoration: theme("Age"),
+                          attribute: "nom_societe",
+                          decoration: theme("Nom Societe"),
                           validators: [
-                            FormBuilderValidators.numeric(
-                                errorText: "l'age doit etre numerique"),
-                            FormBuilderValidators.max(90,
-                                errorText: "l'age doit etre < 90 ans"),
+                            FormBuilderValidators.required(
+                                errorText: "Ce champs est obligatoire")
                           ],
                         ),
                         SizedBox(height: 20.0),
-                        FormBuilderDropdown(
-                          attribute: "sexe",
-                          decoration: theme("sexe"),
-                          hint: Text('Selectionner sexe'),
-                          validators: [],
-                          items: Sexe.values
-                              .map((gender) => DropdownMenuItem(
-                                  value: gender, child: Text("$gender")))
-                              .toList(),
-                        ),
-                        SizedBox(height: 20.0),
-                        FormBuilderDropdown(
-                          attribute: "profession",
-                          decoration: theme("profession"),
-                          hint: Text('Selectionner votre profession actuelle'),
-                          validators: [],
-                          items: Profession.values
-                              .map((p) =>
-                                  DropdownMenuItem(value: p, child: Text("$p")))
-                              .toList(),
-                        ),
                       ],
                     )),
                 SizedBox(height: 20.0),

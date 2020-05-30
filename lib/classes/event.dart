@@ -24,4 +24,42 @@ class Event {
       this.lieu = k;
     });
   }
+
+  Event.fromJson(Map<String, dynamic> json)
+      : nom = json['nom'],
+        corps = json['corps'],
+        dateDebut = DateTime.parse(json['datedebut']),
+        dateFin = DateTime.parse(json['datefin']),
+        photoUrl = json['photo'],
+        pos =
+            Position(latitude: json['latitutde'], longitude: json['longitude']);
+
+  Map<String, dynamic> toJson() => {
+        'nom': nom,
+        'corps': corps,
+        'datedebut': dateDebut,
+        'datefin': dateFin,
+        'photo': photoUrl,
+        'latitude': pos.latitude,
+        'longitude': pos.longitude
+      };
+
+  Event.fromMap(Map<String, dynamic> json)
+      : nom = json['nom'],
+        corps = json['corps'],
+        dateDebut = DateTime.parse(json['datedebut']),
+        dateFin = DateTime.parse(json['datefin']),
+        pos =
+            Position(latitude: json['latitutde'], longitude: json['longitude']),
+        photoUrl = json['photo'];
+
+  Map<String, dynamic> toMap() => {
+        'nom': nom,
+        'corps': corps,
+        'datedebut': dateDebut,
+        'datefin': dateFin,
+        'photo': photoUrl,
+        'latitude': pos.latitude,
+        'longitude': pos.longitude
+      };
 }

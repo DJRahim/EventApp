@@ -119,11 +119,12 @@ Future<String> handShake() async {
 /// ----------------------------------------------------------
 /// Http "GET" request
 /// ----------------------------------------------------------
-Future<String> getRequest(String serviceName, Map<String, String> a) async {
+Future<String> getRequest(String serviceName, Map<String, String> c) async {
   var responseBody = '{"data": "", "status": "NOK"}';
   try {
-    var response =
-        await http.get(_urlBase + '$_serverApi$serviceName', headers: a);
+    var response = await http.get(
+      _urlBase + '$_serverApi$serviceName',
+    );
 
     print(response.statusCode);
     if (response.statusCode == 200) {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/pages/home_page_admin.dart';
 import 'package:eventapp/pages/home_page_normal.dart';
@@ -33,26 +34,27 @@ class ConnectPageState extends State<ConnectPage> {
   void _confirm(BuildContext cont) async {
     if (_formKey.currentState.saveAndValidate()) {
       print(_formKey.currentState.value);
-      // Map<String, String> c =
-      //     Map<String, String>.from(_formKey.currentState.value);
-      // var a = await auth.getRequest('se_connecter', c);
+      Map<String, String> c = Map.from(_formKey.currentState.value);
+      var a = await auth.getRequest(
+          'auth/se_connecter?password=${c['password']}&email=${c['email']}', c);
 
-      // print(a);
+      var b = jsonDecode(a);
 
-      var home = MyHomePage();
+      var home;
 
-      // switch (a.type) {
-      //   case 0:
-      //     home = MyHomePageNormal();
-      //     break;
-      //   case 1:
-      //     home = MyHomePagePublieur();
-      //     break;
-      //   case 2:
-      //     home = MyHomePageAdmin();
-      //     break;
-      //   default:
-      // }
+      switch (b['type']) {
+        case "2":
+          home = MyHomePageNormal();
+          break;
+        case "1":
+          home = MyHomePagePublieur();
+          break;
+        case "0":
+          home = MyHomePageAdmin();
+          break;
+        default:
+          home = MyHomePage();
+      }
 
       if (home.toString() == 'MyHomePage') {
         Scaffold.of(cont).showSnackBar(
@@ -60,10 +62,13 @@ class ConnectPageState extends State<ConnectPage> {
       } else {
         Scaffold.of(cont)
             .showSnackBar(snackBar('Connexion reussi!', Colors.green));
-        // Navigator.pushAndRemoveUntil(
-        //     context,
-        //     MaterialPageRoute(builder: (BuildContext context) => home),
-        //     ModalRoute.withName('/'));
+
+        await Future.delayed(const Duration(seconds: 2), () {});
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => home),
+            ModalRoute.withName('/'));
       }
     } else {
       Scaffold.of(cont)
@@ -108,9 +113,9 @@ class ConnectPageState extends State<ConnectPage> {
                           obscureText: true,
                           maxLines: 1,
                           validators: [
-                            FormBuilderValidators.minLength(8,
+                            FormBuilderValidators.minLength(6,
                                 errorText:
-                                    "mot de passe doit etre > a 8 caracteres"),
+                                    "mot de passe doit etre > a 6 caracteres"),
                             FormBuilderValidators.required(
                                 errorText: "Ce champs est obligatoire!")
                           ],

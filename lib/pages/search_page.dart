@@ -131,7 +131,7 @@ class SearchPageState extends State<SearchPage> {
                 visible: _filterstate,
                 child: Card(
                   child: Container(
-                    height: 420,
+                    height: 460,
                     child: Padding(
                       padding: const EdgeInsets.all(6),
                       child: FormBuilder(
