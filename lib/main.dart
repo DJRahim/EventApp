@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:eventapp/pages/ajouter_event.dart';
 import 'package:eventapp/pages/connect_page.dart';
@@ -13,9 +14,11 @@ import 'package:eventapp/pages/register_page2_normal.dart';
 import 'package:eventapp/pages/register_page3_publieur.dart';
 import 'package:eventapp/pages/search_page.dart';
 import 'package:eventapp/widgets.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Ceci est la page root de l'application (chaque fois l'application s,ouvre, ca passe par cette page)
 // Pour l'instant ca affiche 4 boutons (pour tester):
@@ -41,9 +44,7 @@ class RootPageState extends State<RootPage> {
 
   StreamSubscription connectivitySubscription;
 
-  // final FirebaseMessaging _fcm = new FirebaseMessaging();
-
-  // StreamSubscription iosSubscription;
+  final FirebaseMessaging _fcm = new FirebaseMessaging();
 
   var status;
   Widget home;
@@ -59,52 +60,42 @@ class RootPageState extends State<RootPage> {
         MaterialPageRoute(builder: (BuildContext context) => NoConnection()));
   }
 
+  void firebaseCloudMessagingListeners() async {
+    if (Platform.isIOS) iOSPermission();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    _fcm.getToken().then((token) {
+      print(token);
+      prefs.setString('registerId', token);
+    });
+
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
+  }
+
+  void iOSPermission() {
+    _fcm.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _fcm.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
     // Ca c'est pour gerer les notifications (c'est en commentaire pour tester d'autres fonctionnalites)
-
-    // if (Platform.isIOS) {
-    //   iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
-    //     // save the token  OR subscribe to a topic here
-    //   });
-
-    //   _fcm.requestNotificationPermissions(IosNotificationSettings());
-    // }
-
-    // _fcm.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print("onMessage: $message");
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => AlertDialog(
-    //         content: ListTile(
-    //           title: Text(message['notification']['title']),
-    //           subtitle: Text(message['notification']['bSERbess1991ody']),
-    //         ),
-    //         actions: <Widget>[
-    //           FlatButton(
-    //             child: Text('Ok'),
-    //             onPressed: () => Navigator.of(context).pop(),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     print("onLaunch: $message");
-    //     // TODO optional
-    //   },
-    //   onResume: (Map<String, dynamic> message) async {
-    //     print("onResume: $message");
-    //     // TODO optional
-    //   },
-    // );
-    // _fcm.getToken().then((String token) {
-    //   assert(token != null);
-    //   print(token);
-    // });
+    firebaseCloudMessagingListeners();
 
     // Ca c'est pour gerer la connectivite (s'il y a l'internet ou non)
     // S'il y a de l'internet ca passe au home page
@@ -198,53 +189,54 @@ class RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: nav,
-      home: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            RaisedButton(
-              onPressed: () {
-                nav.currentState.push(MaterialPageRoute(
-                    builder: (BuildContext context) => NoConnection()));
-              },
-              child: Text("Page pas de connexion"),
-            ),
-            SizedBox(height: 20),
-            RaisedButton(
-              onPressed: () {
-                nav.currentState.push(MaterialPageRoute(
-                    builder: (BuildContext context) => MyHomePage()));
-              },
-              child: Text("Page pas de compte"),
-            ),
-            SizedBox(height: 20),
-            RaisedButton(
-              onPressed: () {
-                nav.currentState.push(MaterialPageRoute(
-                    builder: (BuildContext context) => MyHomePageNormal()));
-              },
-              child: Text("Page utilisateur normal"),
-            ),
-            SizedBox(height: 20),
-            RaisedButton(
-              onPressed: () {
-                nav.currentState.push(MaterialPageRoute(
-                    builder: (BuildContext context) => MyHomePagePublieur()));
-              },
-              child: Text("Page publieur"),
-            ),
-            SizedBox(height: 20),
-            RaisedButton(
-              onPressed: () {
-                nav.currentState.push(MaterialPageRoute(
-                    builder: (BuildContext context) => MyHomePageAdmin()));
-              },
-              child: Text("Page admin"),
-            )
-          ],
-        ),
-      ),
+      home: MyHomePage(),
+      // Container(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     crossAxisAlignment: CrossAxisAlignment.center,
+      //     children: <Widget>[
+      //       RaisedButton(
+      //         onPressed: () {
+      //           nav.currentState.push(MaterialPageRoute(
+      //               builder: (BuildContext context) => NoConnection()));
+      //         },
+      //         child: Text("Page pas de connexion"),
+      //       ),
+      //       SizedBox(height: 20),
+      //       RaisedButton(
+      //         onPressed: () {
+      //           nav.currentState.push(MaterialPageRoute(
+      //               builder: (BuildContext context) => MyHomePage()));
+      //         },
+      //         child: Text("Page pas de compte"),
+      //       ),
+      //       SizedBox(height: 20),
+      //       RaisedButton(
+      //         onPressed: () {
+      //           nav.currentState.push(MaterialPageRoute(
+      //               builder: (BuildContext context) => MyHomePageNormal()));
+      //         },
+      //         child: Text("Page utilisateur normal"),
+      //       ),
+      //       SizedBox(height: 20),
+      //       RaisedButton(
+      //         onPressed: () {
+      //           nav.currentState.push(MaterialPageRoute(
+      //               builder: (BuildContext context) => MyHomePagePublieur()));
+      //         },
+      //         child: Text("Page publieur"),
+      //       ),
+      //       SizedBox(height: 20),
+      //       RaisedButton(
+      //         onPressed: () {
+      //           nav.currentState.push(MaterialPageRoute(
+      //               builder: (BuildContext context) => MyHomePageAdmin()));
+      //         },
+      //         child: Text("Page admin"),
+      //       )
+      //     ],
+      //   ),
+      // ),
       routes: {
         // La liste de tout les pages de l'application
         '/Non-connecte': (context) => NoConnection(),

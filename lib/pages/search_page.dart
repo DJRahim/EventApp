@@ -1,10 +1,13 @@
 import 'package:eventapp/classes/event.dart';
+import 'package:eventapp/classes/sous_type.dart';
+import 'package:eventapp/classes/type.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:uic/list_uic.dart';
 import 'package:intl/intl.dart';
+
+import '../database.dart';
 
 // Ceci est la page de recherche
 // Elle permet d'effectuer des recherche avec filtrage
@@ -28,28 +31,14 @@ class SearchPageState extends State<SearchPage> {
   bool _filterstate = true;
   bool _liststate = false;
 
-  List listtype = ['sport', 'music', 'cinema', 'sortie'];
-
-  Event e = new Event(
-      "Nom de l'evenement",
-      "Decription de l'evenement",
-      DateTime.now(),
-      DateTime.now().add(Duration(days: 5)),
-      Position(latitude: 36.7538, longitude: 3.0588),
-      "");
-
   List<Event> listevent = List<Event>();
 
-  void initlist() {
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
+  Future<void> initlist() async {
+    listevent = await DBProvider.db.getAllEvents();
   }
 
   Future<List<Event>> _getItems(int page) async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 2));
     List<Event> list = new List<Event>();
     int i = 1;
     while (listevent.length > ((page - 1) * 10) && i <= 10) {
@@ -67,14 +56,6 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
     initlist();
     super.initState();
   }
@@ -158,7 +139,7 @@ class SearchPageState extends State<SearchPage> {
                                 decoration: theme("Type de l'evenement"),
                                 hint: Text('Selectionner type'),
                                 validators: [FormBuilderValidators.required()],
-                                items: listtype
+                                items: Type.values
                                     .map((value) => DropdownMenuItem(
                                         value: value, child: Text("$value")))
                                     .toList(),
@@ -169,7 +150,7 @@ class SearchPageState extends State<SearchPage> {
                                 decoration: theme("Sous-type de l'evenement"),
                                 hint: Text('Selectionner sous-type'),
                                 validators: [FormBuilderValidators.required()],
-                                items: listtype
+                                items: SousType.values
                                     .map((value) => DropdownMenuItem(
                                         value: value, child: Text("$value")))
                                     .toList(),

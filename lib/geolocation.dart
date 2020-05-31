@@ -14,7 +14,7 @@ getCurrentLocation() {
       .then((Position position) {
     currentPosition = position;
 
-    getAddressFromLatLng();
+    // getAddressFromLatLng();
   }).catchError((e) {
     print(e);
   });

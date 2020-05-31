@@ -1,6 +1,11 @@
+import 'package:eventapp/classes/publieur.dart';
+import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../database.dart';
 
 // Cette page contient la 2eme forme pour les infos supplementaire (pour l'utilisateur normale)
 // elle contient les champs :
@@ -22,14 +27,35 @@ class _RegisterPage3State extends State<RegisterPage3> {
     _formKey.currentState.reset();
   }
 
-  void confirm() {
+  Future<void> confirm(BuildContext cont) async {
     if (_formKey.currentState.saveAndValidate()) {
       var c = Map<String, String>.from(_formKey.currentState.value);
 
-      print(c);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      DBProvider.db.deleteAllPublieur();
+
+      DBProvider.db.newPublieur(Publieur.fromMap({
+        'registerId': 'kjnoooo',
+        'nom': c['nom'],
+        'prenom': c['prenom'],
+        'email': prefs.getString('email'),
+        'numtel': 063737,
+        'nomSociete': ""
+      }));
+
+      Scaffold.of(cont).showSnackBar(snackBar(
+          'Inscription reussi! Veuillez valider votre email.', Colors.green));
+
+      await Future.delayed(const Duration(seconds: 4), () {});
+
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
+          ModalRoute.withName('/'));
     } else {
-      print(_formKey.currentState.value);
-      print("validation failed");
+      Scaffold.of(cont)
+          .showSnackBar(snackBar('Probleme de validation!', Colors.red[800]));
     }
   }
 
@@ -43,63 +69,68 @@ class _RegisterPage3State extends State<RegisterPage3> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
-        padding: EdgeInsets.all(0),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 80.0),
-                FormBuilder(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(height: 20.0),
-                        FormBuilderTextField(
-                          attribute: "nom",
-                          decoration: theme("Nom"),
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: "Ce champs est obligatoire")
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        FormBuilderTextField(
-                          attribute: "prenom",
-                          decoration: theme("Prenom"),
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: "Ce champs est obligatoire")
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        FormBuilderTextField(
-                          attribute: "nom_societe",
-                          decoration: theme("Nom Societe"),
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: "Ce champs est obligatoire")
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                      ],
-                    )),
-                SizedBox(height: 20.0),
-                Row(
-                  children: <Widget>[
-                    Expanded(child: button(context, "Confirmer", confirm)),
-                    SizedBox(width: 20),
-                    Expanded(child: button(context, "reset", reset))
-                  ],
-                )
-              ],
+      body: Builder(builder: (cont) {
+        return Padding(
+          padding: EdgeInsets.all(0),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 80.0),
+                  FormBuilder(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 20.0),
+                          FormBuilderTextField(
+                            attribute: "nom",
+                            decoration: theme("Nom"),
+                            validators: [
+                              FormBuilderValidators.required(
+                                  errorText: "Ce champs est obligatoire")
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          FormBuilderTextField(
+                            attribute: "prenom",
+                            decoration: theme("Prenom"),
+                            validators: [
+                              FormBuilderValidators.required(
+                                  errorText: "Ce champs est obligatoire")
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          FormBuilderTextField(
+                            attribute: "nomSociete",
+                            decoration: theme("Nom Societe"),
+                            validators: [
+                              FormBuilderValidators.required(
+                                  errorText: "Ce champs est obligatoire")
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                        ],
+                      )),
+                  SizedBox(height: 20.0),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: button(context, "Confirmer", () {
+                        confirm(cont);
+                      })),
+                      SizedBox(width: 20),
+                      Expanded(child: button(context, "reset", reset))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

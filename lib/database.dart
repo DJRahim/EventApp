@@ -5,7 +5,6 @@ import 'package:eventapp/classes/user_normal.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'classes/event.dart';
 
 class DBProvider {
@@ -28,24 +27,24 @@ class DBProvider {
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE User ("
-          "registerId INTEGER PRIMARY KEY,"
+          "registerId TEXT PRIMARY KEY,"
           "nom TEXT,"
           "prenom TEXT,"
           "email TEXT,"
           "age TEXT,"
           "sexe TEXT,"
-          "profession,"
+          "profession TEXT,"
           "numtel INTEGER,"
           "latitude REAL,"
-          "longitude REAL,"
+          "longitude REAL"
           ")");
       await db.execute("CREATE TABLE Publieur ("
-          "registerId INTEGER PRIMARY KEY,"
+          "registerId TEXT PRIMARY KEY,"
           "nom TEXT,"
           "prenom TEXT,"
           "email TEXT,"
           "numtel INTEGER,"
-          "nomSociete TEXT,"
+          "nomSociete TEXT"
           ")");
       await db.execute("CREATE TABLE Event ("
           "nom TEXT,"
@@ -54,7 +53,7 @@ class DBProvider {
           "datefin TEXT,"
           "photoUrl TEXT,"
           "latitude REAL,"
-          "longitude REAL,"
+          "longitude REAL"
           ")");
     });
   }
@@ -68,6 +67,12 @@ class DBProvider {
   newPublieur(Publieur newUser) async {
     final db = await database;
     var res = await db.insert("Publieur", newUser.toMap());
+    return res;
+  }
+
+  newEvent(Event newEvent) async {
+    final db = await database;
+    var res = await db.insert("Event", newEvent.toMap());
     return res;
   }
 
@@ -93,8 +98,37 @@ class DBProvider {
   Future<List<Event>> getAllEvents() async {
     final db = await database;
     var res = await db.query("Event");
-    List<Event> list =
-        res.isNotEmpty ? res.map((c) => Event.fromMap(c)).toList() : [];
+    List<Event> list = res.isNotEmpty
+        ? res.map((c) {
+            var event = Event.fromMap(c);
+            event.setLieu();
+            return event;
+          }).toList()
+        : [];
+    return list;
+  }
+
+  Future<List<Normal>> getAllUsers() async {
+    final db = await database;
+    var res = await db.query("User");
+    List<Normal> list = res.isNotEmpty
+        ? res.map((c) {
+            var user = Normal.fromMap(c);
+            return user;
+          }).toList()
+        : [];
+    return list;
+  }
+
+  Future<List<Publieur>> getAllPubli() async {
+    final db = await database;
+    var res = await db.query("Publieur");
+    List<Publieur> list = res.isNotEmpty
+        ? res.map((c) {
+            var user = Publieur.fromMap(c);
+            return user;
+          }).toList()
+        : [];
     return list;
   }
 
@@ -108,8 +142,18 @@ class DBProvider {
     return db.delete("Publieur", where: "email = ?", whereArgs: [email]);
   }
 
+  deleteEvent() async {
+    final db = await database;
+    return db.delete("Event", where: "nom = ?", whereArgs: ['demo']);
+  }
+
+  deleteAllPublieur() async {
+    final db = await database;
+    db.rawDelete("Delete from Publieur");
+  }
+
   deleteAll() async {
     final db = await database;
-    db.rawDelete("Delete * from Event");
+    db.rawDelete("Delete from Event");
   }
 }

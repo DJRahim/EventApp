@@ -164,7 +164,7 @@ Widget eventItem(Event e, BuildContext context) {
                           SizedBox(height: 10.0),
                           Text(e.lieu,
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w500)),
+                                  fontSize: 15, fontWeight: FontWeight.w600)),
                           SizedBox(height: 15.0),
                         ],
                       ),

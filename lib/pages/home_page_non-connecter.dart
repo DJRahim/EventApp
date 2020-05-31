@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:uic/list_uic.dart';
+
+import '../database.dart';
 
 // Cette page est pour afficher l'historique des evenements (en cas de non connexion internet)
 // Donc ca contient juste une liste des evenements (si on clique sur, ca affiche
@@ -24,21 +25,16 @@ class NoConnectionState extends State<NoConnection> {
 
   List<Event> listevent = List<Event>();
 
-  void initlist() {
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
-    listevent.add(e);
+  Future<void> initlist() async {
+    listevent = await DBProvider.db.getAllEvents();
   }
 
   Future<List<Event>> _getItems(int page) async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 1));
     List<Event> list = new List<Event>();
     int i = 1;
-    while (listevent.length > ((page - 1) * 11) && i <= 10) {
-      list.add(listevent[(page - 1) * 10 + i]);
+    while (listevent.length > ((page - 1) * 8) && i <= 7) {
+      list.add(listevent[(page - 1) * 7 + i]);
       i++;
     }
     return list;
@@ -52,23 +48,7 @@ class NoConnectionState extends State<NoConnection> {
       onGetItems: (int page) => _getItems(page),
     );
     initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
-    initlist();
   }
-
-  Event e = new Event(
-      "Nom de l'evenement",
-      "Decription de l'evenement",
-      DateTime.now(),
-      DateTime.now().add(Duration(days: 5)),
-      Position(latitude: 36.7538, longitude: 3.0588),
-      "");
 
   @override
   Widget build(BuildContext context) {

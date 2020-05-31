@@ -7,6 +7,9 @@ import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:eventapp/auth.dart' as auth;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../database.dart';
 
 // Cette page est pour la connexion de tous les utilisateurs par email et password
 // Donc c'est une forme simple avec 2 champs de saisie et 2 bouttons
@@ -33,21 +36,42 @@ class ConnectPageState extends State<ConnectPage> {
 // la mathode qui permet de valider et envoyer les champs a l'api
   void _confirm(BuildContext cont) async {
     if (_formKey.currentState.saveAndValidate()) {
-      print(_formKey.currentState.value);
-      Map<String, String> c = Map.from(_formKey.currentState.value);
-      var a = await auth.getRequest(
-          'auth/se_connecter?password=${c['password']}&email=${c['email']}', c);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      var b = jsonDecode(a);
+      Map<String, String> c = Map.from(_formKey.currentState.value);
+      // var a = await auth.getRequest(
+      //     'auth/se_connecter?email=${c['email']}&password=${c['password']}', c);
+
+      // var b = jsonDecode(a);
+      // print(c);
+
+      // print(b);
 
       var home;
 
-      switch (b['type']) {
+      switch (prefs.getString('type')) {
         case "2":
           home = MyHomePageNormal();
+          // var user = await DBProvider.db.getAllUsers();
+          // var us = user[0].toMap();
+
+          // print(us);
+
+          // await auth.getRequest(
+          //     "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&chois=['1','2','3','4','5']&age=${us['age']}&num=${us['numtel']}&profesion=${us['profession']}&sex=${us['sexe']}",
+          //     {});
           break;
         case "1":
           home = MyHomePagePublieur();
+
+          // var user = await DBProvider.db.getAllPubli();
+          // var us = user[0].toMap();
+
+          // print(us);
+
+          // await auth.getRequest(
+          //     "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&nom_organis=serbess&num=988786",
+          //     {});
           break;
         case "0":
           home = MyHomePageAdmin();
@@ -63,7 +87,10 @@ class ConnectPageState extends State<ConnectPage> {
         Scaffold.of(cont)
             .showSnackBar(snackBar('Connexion reussi!', Colors.green));
 
-        await Future.delayed(const Duration(seconds: 2), () {});
+        // prefs.setString('token', b['token']);
+        // prefs.setString('type', b['type']);
+
+        await Future.delayed(const Duration(seconds: 4), () {});
 
         Navigator.pushAndRemoveUntil(
             context,
@@ -96,6 +123,7 @@ class ConnectPageState extends State<ConnectPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        SizedBox(height: 260),
                         FormBuilderTextField(
                           attribute: "email",
                           decoration: theme("email"),
