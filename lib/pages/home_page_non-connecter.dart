@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:eventapp/classes/event.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:uic/list_uic.dart';
-import '../database.dart';
+import '../tools/database.dart';
 
 // Cette page est pour afficher l'historique des evenements (en cas de non connexion internet)
 // Donc ca contient juste une liste des evenements (si on clique sur, ca affiche

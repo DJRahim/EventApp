@@ -1,10 +1,10 @@
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/pages/home_page.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uic/list_uic.dart';
-import '../database.dart';
+import '../tools/database.dart';
 
 // Cette page est la home page de l'utilisateur normale
 // Ca contient une liste des evenements recommandes (pour l'instant seulement une liste de test)

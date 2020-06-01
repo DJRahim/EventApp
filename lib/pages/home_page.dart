@@ -1,4 +1,4 @@
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 
 // Ca est la home page pour les utilisateurs qui ne sont pas connecter

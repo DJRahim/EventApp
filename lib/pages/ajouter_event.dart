@@ -1,9 +1,7 @@
-import 'dart:ffi';
-
 import 'package:eventapp/classes/event.dart';
-import 'package:eventapp/database.dart';
+import 'package:eventapp/tools/database.dart';
 import 'package:eventapp/pages/home_page_publieur.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

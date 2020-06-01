@@ -1,13 +1,13 @@
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/classes/sous_type.dart';
 import 'package:eventapp/classes/type.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:uic/list_uic.dart';
 import 'package:intl/intl.dart';
 
-import '../database.dart';
+import '../tools/database.dart';
 
 // Ceci est la page de recherche
 // Elle permet d'effectuer des recherche avec filtrage

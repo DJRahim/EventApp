@@ -3,13 +3,13 @@ import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/pages/home_page_admin.dart';
 import 'package:eventapp/pages/home_page_normal.dart';
 import 'package:eventapp/pages/home_page_publieur.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:eventapp/auth.dart' as auth;
+import 'package:eventapp/tools/auth.dart' as auth;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../database.dart';
+import '../tools/database.dart';
 
 // Cette page est pour la connexion de tous les utilisateurs par email et password
 // Donc c'est une forme simple avec 2 champs de saisie et 2 bouttons

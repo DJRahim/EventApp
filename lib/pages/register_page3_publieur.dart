@@ -1,11 +1,11 @@
 import 'package:eventapp/classes/publieur.dart';
 import 'package:eventapp/pages/home_page.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../database.dart';
+import '../tools/database.dart';
 
 // Cette page contient la 2eme forme pour les infos supplementaire (pour l'utilisateur normale)
 // elle contient les champs :

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:eventapp/classes/event.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

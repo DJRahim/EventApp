@@ -1,13 +1,13 @@
 import 'package:eventapp/classes/user_normal.dart';
-import 'package:eventapp/database.dart';
+import 'package:eventapp/tools/database.dart';
 import 'package:eventapp/pages/home_page.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:eventapp/geolocation.dart' as Geoloc;
+import 'package:eventapp/tools/geolocation.dart' as Geoloc;
 
 // Cette page contient la 2eme forme pour les infos supplementaire (pour l'utilisateur normale)
 // elle contient les champs :

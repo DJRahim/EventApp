@@ -13,7 +13,7 @@ import 'package:eventapp/pages/register_page.dart';
 import 'package:eventapp/pages/register_page2_normal.dart';
 import 'package:eventapp/pages/register_page3_publieur.dart';
 import 'package:eventapp/pages/search_page.dart';
-import 'package:eventapp/widgets.dart';
+import 'package:eventapp/tools/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
