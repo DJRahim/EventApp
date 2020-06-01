@@ -41,8 +41,8 @@ class SearchPageState extends State<SearchPage> {
     await Future.delayed(Duration(seconds: 2));
     List<Event> list = new List<Event>();
     int i = 1;
-    while (listevent.length > ((page - 1) * 10) && i <= 10) {
-      list.add(listevent[(page - 1) * 10 + i]);
+    while ((i + (page - 1) * 7) <= listevent.length && i <= 7) {
+      list.add(listevent[(page - 1) * 7 + i - 1]);
       i++;
     }
     return list;

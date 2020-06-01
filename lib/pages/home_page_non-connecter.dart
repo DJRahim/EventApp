@@ -3,7 +3,6 @@ import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:uic/list_uic.dart';
-
 import '../database.dart';
 
 // Cette page est pour afficher l'historique des evenements (en cas de non connexion internet)
@@ -32,8 +31,8 @@ class NoConnectionState extends State<NoConnection> {
   Future<List<Event>> _getItems(int page) async {
     await Future.delayed(Duration(seconds: 1));
     List<Event> list = new List<Event>();
-    int i = 1;
-    while (listevent.length > ((page - 1) * 8) && i <= 7) {
+    int i = 0;
+    while ((i + (page - 1) * 7) < listevent.length && i < 7) {
       list.add(listevent[(page - 1) * 7 + i]);
       i++;
     }
@@ -43,18 +42,17 @@ class NoConnectionState extends State<NoConnection> {
   @override
   void initState() {
     super.initState();
-
+    initlist();
     uic = ListUicController<Event>(
       onGetItems: (int page) => _getItems(page),
     );
-    initlist();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Liste event test"),
+        title: Text("Historique des evenements"),
       ),
       body: listEvent(uic, context),
       backgroundColor: Colors.white,

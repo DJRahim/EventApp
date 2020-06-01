@@ -78,51 +78,56 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
             ),
           ),
           SizedBox(height: 12.0),
-          Card(
-              elevation: 6,
-              color: Colors.white,
-              child: Padding(
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Card(
+                elevation: 6,
+                color: Colors.white,
+                child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                            "    De:  " +
+                                DateFormat.yMd().add_jm().format(e.dateDebut),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        Text(
+                            "A:  " +
+                                DateFormat.yMd().add_jm().format(
+                                    e.dateFin.add(new Duration(days: 5))) +
+                                "    ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    ))),
+          ),
+          SizedBox(height: 20.0),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Card(
+                elevation: 6,
+                color: Colors.white,
+                child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                          "De:  " +
-                              DateFormat.yMd().add_jm().format(e.dateDebut),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 15.0),
-                      Text(
-                          "A:  " +
-                              DateFormat.yMd()
-                                  .add_jm()
-                                  .format(e.dateFin.add(new Duration(days: 5))),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                    ],
-                  ))),
-          SizedBox(height: 20.0),
-          Card(
-              elevation: 6,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      e.nom,
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(e.corps,
+                        e.nom,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
-                  ],
-                ),
-              ))
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 20.0),
+                      Text(e.corps,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                )),
+          )
         ],
       ),
     ),
@@ -152,7 +157,7 @@ Widget eventItem(Event e, BuildContext context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: 255,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +182,7 @@ Widget eventItem(Event e, BuildContext context) {
                         Text('De: ' + DateFormat('y/d/M').format(e.dateDebut),
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.w600)),
-                        SizedBox(height: 17.0),
+                        SizedBox(height: 15.0),
                         Text('  A: ' + DateFormat('y/d/M').format(e.dateFin),
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.w600)),
@@ -250,5 +255,37 @@ SnackBar snackBar(String text, Color col) {
       onPressed: () {},
     ),
     backgroundColor: col,
+  );
+}
+
+// Ca c'est pour afficher des message de confirmation (lorsque la deconnexion par exemple)
+showAlertDialog(BuildContext context, String text1, String text2,
+    void action1(), void action2()) {
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text("Annuler"),
+    onPressed: action1,
+  );
+  Widget continueButton = FlatButton(
+    child: Text("Confirmer"),
+    onPressed: action2,
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text(text1),
+    content: Text(text2),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
   );
 }

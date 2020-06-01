@@ -39,41 +39,41 @@ class ConnectPageState extends State<ConnectPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       Map<String, String> c = Map.from(_formKey.currentState.value);
-      // var a = await auth.getRequest(
-      //     'auth/se_connecter?email=${c['email']}&password=${c['password']}', c);
+      var a = await auth.getRequest(
+          'auth/se_connecter?email=${c['email']}&password=${c['password']}', c);
 
-      // var b = jsonDecode(a);
+      var b = jsonDecode(a);
       // print(c);
 
       // print(b);
 
       var home;
 
-      switch (prefs.getString('type')) {
-        case "2":
+      switch (b['type']) {
+        case 2:
           home = MyHomePageNormal();
-          // var user = await DBProvider.db.getAllUsers();
-          // var us = user[0].toMap();
+          var user = await DBProvider.db.getAllUsers();
+          var us = user[0].toMap();
 
           // print(us);
 
-          // await auth.getRequest(
-          //     "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&chois=['1','2','3','4','5']&age=${us['age']}&num=${us['numtel']}&profesion=${us['profession']}&sex=${us['sexe']}",
-          //     {});
+          await auth.getRequest(
+              "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&chois=['1','2','3','4','5']&age=${us['age']}&num=${us['numtel']}&profesion=${us['profession']}&sex=${us['sexe']}",
+              {});
           break;
-        case "1":
+        case 1:
           home = MyHomePagePublieur();
 
-          // var user = await DBProvider.db.getAllPubli();
-          // var us = user[0].toMap();
+          var user = await DBProvider.db.getAllPubli();
+          var us = user[0].toMap();
 
           // print(us);
 
-          // await auth.getRequest(
-          //     "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&nom_organis=serbess&num=988786",
-          //     {});
+          await auth.getRequest(
+              "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&nom_organis=serbess&num=988786",
+              {});
           break;
-        case "0":
+        case 0:
           home = MyHomePageAdmin();
           break;
         default:
@@ -87,8 +87,8 @@ class ConnectPageState extends State<ConnectPage> {
         Scaffold.of(cont)
             .showSnackBar(snackBar('Connexion reussi!', Colors.green));
 
-        // prefs.setString('token', b['token']);
-        // prefs.setString('type', b['type']);
+        prefs.setString('token', b['token']);
+        prefs.setInt('type', b['type']);
 
         await Future.delayed(const Duration(seconds: 4), () {});
 
@@ -113,55 +113,57 @@ class ConnectPageState extends State<ConnectPage> {
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  FormBuilder(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(height: 260),
-                        FormBuilderTextField(
-                          attribute: "email",
-                          decoration: theme("email"),
-                          validators: [
-                            FormBuilderValidators.email(
-                                errorText: "e-mail non valide"),
-                            FormBuilderValidators.required(
-                                errorText: "Ce champs est obligatoire!")
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        FormBuilderTextField(
-                          attribute: "password",
-                          decoration: theme("password"),
-                          obscureText: true,
-                          maxLines: 1,
-                          validators: [
-                            FormBuilderValidators.minLength(6,
-                                errorText:
-                                    "mot de passe doit etre > a 6 caracteres"),
-                            FormBuilderValidators.required(
-                                errorText: "Ce champs est obligatoire!")
-                          ],
-                        ),
-                        SizedBox(height: 30.0),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                                child: button(context, "Confirmer",
-                                    () => _confirm(context))),
-                            SizedBox(width: 20),
-                            Expanded(child: button(context, "reset", _reset))
-                          ],
-                        )
-                      ],
+              child: Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FormBuilder(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 260),
+                          FormBuilderTextField(
+                            attribute: "email",
+                            decoration: theme("email"),
+                            validators: [
+                              FormBuilderValidators.email(
+                                  errorText: "e-mail non valide"),
+                              FormBuilderValidators.required(
+                                  errorText: "Ce champs est obligatoire!")
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          FormBuilderTextField(
+                            attribute: "password",
+                            decoration: theme("password"),
+                            obscureText: true,
+                            maxLines: 1,
+                            validators: [
+                              FormBuilderValidators.minLength(6,
+                                  errorText:
+                                      "mot de passe doit etre > a 6 caracteres"),
+                              FormBuilderValidators.required(
+                                  errorText: "Ce champs est obligatoire!")
+                            ],
+                          ),
+                          SizedBox(height: 30.0),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                  child: button(context, "Confirmer",
+                                      () => _confirm(context))),
+                              SizedBox(width: 20),
+                              Expanded(child: button(context, "reset", _reset))
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -28,12 +28,14 @@ class MyHomePageState extends State<MyHomePage> {
             title: Text("Se connecter"),
             onTap: () {
               Navigator.pop(context);
+              _connect();
             },
           ),
           ListTile(
             title: Text("S'inscrire"),
             onTap: () {
               Navigator.pop(context);
+              _signup();
             },
           ),
         ],
@@ -65,7 +67,7 @@ class MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _connect() {
+  Future<void> _connect() async {
     Navigator.pushNamed(context, '/connection');
   }
 

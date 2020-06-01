@@ -2,8 +2,8 @@ import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uic/list_uic.dart';
-
 import '../database.dart';
 
 // Cette page est la home page de l'utilisateur normale
@@ -37,8 +37,8 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
     await Future.delayed(Duration(seconds: 1));
     List<Event> list = new List<Event>();
     int i = 1;
-    while (listevent.length > ((page - 1) * 8) && i <= 7) {
-      list.add(listevent[(page - 1) * 7 + i]);
+    while ((i + (page - 1) * 7) <= listevent.length && i <= 7) {
+      list.add(listevent[(page - 1) * 7 + i - 1]);
       i++;
     }
     return list;
@@ -60,7 +60,7 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
         ListTile(
           title: Text("Se deconnecter"),
           onTap: () {
-            logout();
+            logout(context);
             Navigator.pop(context);
           },
         ),
@@ -82,12 +82,18 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
     );
   }
 
-  void logout() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
-        ModalRoute.withName('/'));
+  Future<void> logout(BuildContext cont) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // le traitement de la deconnexion pas encore programme
+    showAlertDialog(
+        cont, "Deconnexion", "Etes-vous sur de vouloir se deconnecter?", () {},
+        () {
+      prefs.setInt('type', -1);
+
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
+          ModalRoute.withName('/'));
+    });
   }
 }

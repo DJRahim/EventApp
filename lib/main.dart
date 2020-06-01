@@ -15,7 +15,6 @@ import 'package:eventapp/pages/register_page3_publieur.dart';
 import 'package:eventapp/pages/search_page.dart';
 import 'package:eventapp/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,8 +45,12 @@ class RootPageState extends State<RootPage> {
 
   final FirebaseMessaging _fcm = new FirebaseMessaging();
 
+  SharedPreferences prefs;
+
   var status;
-  Widget home;
+  Widget home = Scaffold();
+
+  ConnectivityResult connect = ConnectivityResult.wifi;
 
 // Ca c'est juste une methode pour le bouton quitter
   void quit() {
@@ -62,8 +65,6 @@ class RootPageState extends State<RootPage> {
 
   void firebaseCloudMessagingListeners() async {
     if (Platform.isIOS) iOSPermission();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     _fcm.getToken().then((token) {
       print(token);
@@ -91,9 +92,36 @@ class RootPageState extends State<RootPage> {
     });
   }
 
+  Future<void> initStatus() async {
+    prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      prefs.setInt('type', 1);
+
+      status = prefs.getInt('type');
+
+      switch (status) {
+        case 2:
+          home = new MyHomePageNormal();
+          break;
+        case 1:
+          home = new MyHomePagePublieur();
+          break;
+        case 0:
+          home = new MyHomePageAdmin();
+          break;
+        default:
+          home = new MyHomePage();
+      }
+    });
+  }
+
   @override
   void initState() {
-    super.initState();
+    // on utilise le status pour choisir la home page adequat
+
+    initStatus();
+
     // Ca c'est pour gerer les notifications (c'est en commentaire pour tester d'autres fonctionnalites)
     firebaseCloudMessagingListeners();
 
@@ -107,6 +135,7 @@ class RootPageState extends State<RootPage> {
         .onConnectivityChanged
         .listen((ConnectivityResult connectivityResult) {
       if (connectivityResult == ConnectivityResult.none) {
+        connect = ConnectivityResult.none;
         nav.currentState.push(MaterialPageRoute(
             builder: (BuildContext context) => WillPopScope(
                   onWillPop: () async => false,
@@ -150,38 +179,19 @@ class RootPageState extends State<RootPage> {
                   ),
                 )));
       } else {
-        // apres la verification de la connectivity, on verifie quel home page a afficher avec la fonction
-        // handshake()
-
-        //status = handshake();
-
-        nav.currentState.push(
-            MaterialPageRoute(builder: (BuildContext context) => RootPage()));
-      }
-      // on utilise le status pour choisir le home page adequat
-
-      switch (status) {
-        case 'NonCompte':
-          home = new MyHomePage();
-          break;
-        case 'Normal':
-          home = new MyHomePageNormal();
-          break;
-        case 'Publieur':
-          home = new MyHomePagePublieur();
-          break;
-        case 'Admin':
-          home = new MyHomePageAdmin();
-          break;
-        default:
+        if (connect == ConnectivityResult.none) {
+          nav.currentState
+              .push(MaterialPageRoute(builder: (BuildContext context) => home));
+        }
       }
     });
+
+    super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-
     connectivitySubscription.cancel();
   }
 
@@ -189,54 +199,7 @@ class RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: nav,
-      home: MyHomePage(),
-      // Container(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     crossAxisAlignment: CrossAxisAlignment.center,
-      //     children: <Widget>[
-      //       RaisedButton(
-      //         onPressed: () {
-      //           nav.currentState.push(MaterialPageRoute(
-      //               builder: (BuildContext context) => NoConnection()));
-      //         },
-      //         child: Text("Page pas de connexion"),
-      //       ),
-      //       SizedBox(height: 20),
-      //       RaisedButton(
-      //         onPressed: () {
-      //           nav.currentState.push(MaterialPageRoute(
-      //               builder: (BuildContext context) => MyHomePage()));
-      //         },
-      //         child: Text("Page pas de compte"),
-      //       ),
-      //       SizedBox(height: 20),
-      //       RaisedButton(
-      //         onPressed: () {
-      //           nav.currentState.push(MaterialPageRoute(
-      //               builder: (BuildContext context) => MyHomePageNormal()));
-      //         },
-      //         child: Text("Page utilisateur normal"),
-      //       ),
-      //       SizedBox(height: 20),
-      //       RaisedButton(
-      //         onPressed: () {
-      //           nav.currentState.push(MaterialPageRoute(
-      //               builder: (BuildContext context) => MyHomePagePublieur()));
-      //         },
-      //         child: Text("Page publieur"),
-      //       ),
-      //       SizedBox(height: 20),
-      //       RaisedButton(
-      //         onPressed: () {
-      //           nav.currentState.push(MaterialPageRoute(
-      //               builder: (BuildContext context) => MyHomePageAdmin()));
-      //         },
-      //         child: Text("Page admin"),
-      //       )
-      //     ],
-      //   ),
-      // ),
+      home: home,
       routes: {
         // La liste de tout les pages de l'application
         '/Non-connecte': (context) => NoConnection(),
