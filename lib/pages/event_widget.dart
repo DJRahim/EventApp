@@ -39,9 +39,17 @@ class EventWidgetState extends State<EventWidget> {
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              event(action, m, e, context),
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.84,
+                  child: event(action, m, e, context)),
+              SizedBox(height: 7),
+              button(context, "Participer", participe)
             ],
           ),
         ));
+  }
+
+  void participe() {
+    
   }
 }

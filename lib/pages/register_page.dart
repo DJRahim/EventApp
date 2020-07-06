@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:eventapp/tools/auth.dart' as auth;
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
@@ -36,25 +38,25 @@ class RegisterPageState extends State<RegisterPage> {
       Map<String, String> c = Map.from(_formKey.currentState.value);
 
       print(c);
-      // var v = await auth.getRequest(
-      //     "auth/s_inscrire?type=${c['type']}&email=${c['email']}&password=${c['password']}",
-      //     c);
-      // print(v);
+      var v = await auth.getRequest(
+          "auth/s_inscrire?type=${c['type']}&email=${c['email']}&password=${c['password']}",
+          c);
+      print(v);
 
-      // var k = jsonDecode(v);
+      var k = jsonDecode(v);
 
-      // if (k['message'] == 'email envoyer !!') {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('email', c['email']);
-      await prefs.setString('password', c['password']);
-      await prefs.setString('type', c['type']);
+      if (k['message'] == 'email envoyer !!') {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('email', c['email']);
+        await prefs.setString('password', c['password']);
+        // await prefs.setString('type', c['type']);
 
-      if (c['type'] == '1') {
-        Navigator.pushNamed(context, '/inscription3');
-      } else {
-        Navigator.pushNamed(context, '/inscription2');
+        if (c['type'] == '1') {
+          Navigator.pushNamed(context, '/inscription3');
+        } else {
+          Navigator.pushNamed(context, '/inscription2');
+        }
       }
-      // }
     } else {
       Scaffold.of(cont)
           .showSnackBar(snackBar('Probleme de validation!', Colors.red[800]));

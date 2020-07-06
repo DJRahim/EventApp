@@ -139,7 +139,7 @@ class SearchPageState extends State<SearchPage> {
                                 decoration: theme("Type de l'evenement"),
                                 hint: Text('Selectionner type'),
                                 validators: [FormBuilderValidators.required()],
-                                items: Type.values
+                                items: splitEnum(Type.values.toList())
                                     .map((value) => DropdownMenuItem(
                                         value: value, child: Text("$value")))
                                     .toList(),
@@ -150,7 +150,7 @@ class SearchPageState extends State<SearchPage> {
                                 decoration: theme("Sous-type de l'evenement"),
                                 hint: Text('Selectionner sous-type'),
                                 validators: [FormBuilderValidators.required()],
-                                items: SousType.values
+                                items: splitEnum(SousType.values.toList())
                                     .map((value) => DropdownMenuItem(
                                         value: value, child: Text("$value")))
                                     .toList(),
@@ -172,7 +172,7 @@ class SearchPageState extends State<SearchPage> {
                                       child: Text("Prochaine mois"),
                                       value: "next_month"),
                                 ],
-                                validators: [FormBuilderValidators.required()],
+                                validators: [],
                               ),
                               SizedBox(height: 10),
                               FormBuilderDateTimePicker(

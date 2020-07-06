@@ -98,6 +98,7 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
     showAlertDialog(
         cont, "Deconnexion", "Etes-vous sur de vouloir se deconnecter?", () {},
         () {
+      prefs.clear();
       prefs.setInt('type', -1);
 
       Navigator.pushAndRemoveUntil(

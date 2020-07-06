@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:eventapp/tools/auth.dart' as auth;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../tools/database.dart';
 
 // Cette page est pour la connexion de tous les utilisateurs par email et password

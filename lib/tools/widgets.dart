@@ -233,6 +233,17 @@ dynamic posToLoc(double lat, double long) async {
   return addresses.first;
 }
 
+// Ceci est une methode pour convetir la liste des enum vers une liste de String
+
+List splitEnum(List a) {
+  var b = List();
+  for (int i = 0; i < a.length; i++) {
+    b.add(a[i].toString().split('.')[1]);
+  }
+
+  return b;
+}
+
 // Ca est le menu des parametres
 
 Widget drawer(BuildContext context, {List<Widget> listWidget}) {

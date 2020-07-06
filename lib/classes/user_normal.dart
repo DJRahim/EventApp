@@ -9,9 +9,9 @@ class Normal {
   String email;
   String registerId;
   String age;
-  String sexe;
+  Sexe sexe;
   int numtel;
-  String profession;
+  Profession profession;
   Position location;
   List<SousType> listeInteret;
 

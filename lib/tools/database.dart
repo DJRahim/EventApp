@@ -47,7 +47,11 @@ class DBProvider {
           "nomSociete TEXT"
           ")");
       await db.execute("CREATE TABLE Event ("
+          "id_event INTEGER,"
           "nom TEXT,"
+          "nomOrganis TEXT,"
+          "prix REAL,"
+          "nbPlaceDispo INTEGER,"
           "corps TEXT,"
           "datedebut TEXT,"
           "datefin TEXT,"

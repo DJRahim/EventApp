@@ -1,3 +1,5 @@
+import 'package:eventapp/classes/profession.dart';
+import 'package:eventapp/classes/sexe.dart';
 import 'package:eventapp/classes/user_normal.dart';
 import 'package:eventapp/tools/database.dart';
 import 'package:eventapp/pages/home_page.dart';
@@ -151,7 +153,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             decoration: theme("sexe"),
                             hint: Text('Selectionner sexe'),
                             validators: [],
-                            items: ['Homme', 'Femme']
+                            items: splitEnum(Sexe.values.toList())
                                 .map((gender) => DropdownMenuItem(
                                     value: gender, child: Text("$gender")))
                                 .toList(),
@@ -163,7 +165,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             hint:
                                 Text('Selectionner votre profession actuelle'),
                             validators: [],
-                            items: ['Etudiant', 'Enseignant']
+                            items: splitEnum(Profession.values.toList())
                                 .map((p) => DropdownMenuItem(
                                     value: p, child: Text("$p")))
                                 .toList(),
