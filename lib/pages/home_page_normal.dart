@@ -74,6 +74,7 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
                 Navigator.pushNamed(context, '/search');
               })
         ],
+        iconTheme: new IconThemeData(color: Colors.blueGrey[800]),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

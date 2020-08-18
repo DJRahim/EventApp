@@ -1,5 +1,4 @@
 import 'package:eventapp/classes/profession.dart';
-import 'package:eventapp/classes/sexe.dart';
 import 'package:eventapp/classes/user_normal.dart';
 import 'package:eventapp/tools/database.dart';
 import 'package:eventapp/pages/home_page.dart';
@@ -48,6 +47,8 @@ class _RegisterPage2State extends State<RegisterPage2> {
         var c = Map<String, String>.from(_formKey.currentState.value);
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool("upload", false);
+
         double latitude;
         double longitude;
         if (loc == 1) {
@@ -119,17 +120,8 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         children: <Widget>[
                           SizedBox(height: 20.0),
                           FormBuilderTextField(
-                            attribute: "nom",
+                            attribute: "nom d'utilisateur",
                             decoration: theme("Nom"),
-                            validators: [
-                              FormBuilderValidators.required(
-                                  errorText: "Ce champs est obligatoire")
-                            ],
-                          ),
-                          SizedBox(height: 20.0),
-                          FormBuilderTextField(
-                            attribute: "prenom",
-                            decoration: theme("Prenom"),
                             validators: [
                               FormBuilderValidators.required(
                                   errorText: "Ce champs est obligatoire")
@@ -152,8 +144,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             attribute: "sexe",
                             decoration: theme("sexe"),
                             hint: Text('Selectionner sexe'),
-                            validators: [],
-                            items: splitEnum(Sexe.values.toList())
+                            items: ["Homme", "Femme"]
                                 .map((gender) => DropdownMenuItem(
                                     value: gender, child: Text("$gender")))
                                 .toList(),
@@ -161,10 +152,8 @@ class _RegisterPage2State extends State<RegisterPage2> {
                           SizedBox(height: 20.0),
                           FormBuilderDropdown(
                             attribute: "profession",
-                            decoration: theme("profession"),
-                            hint:
-                                Text('Selectionner votre profession actuelle'),
-                            validators: [],
+                            decoration: theme("Domaine d'exercice"),
+                            hint: Text('Selectionner votre domaine actuelle'),
                             items: splitEnum(Profession.values.toList())
                                 .map((p) => DropdownMenuItem(
                                     value: p, child: Text("$p")))

@@ -90,13 +90,16 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
                       children: <Widget>[
                         Text(
                             "    De:  " +
-                                DateFormat.yMd().add_jm().format(e.dateDebut),
+                                DateFormat.yMd()
+                                    .add_jm()
+                                    .format(DateTime.parse(e.dateDebut)),
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                         Text(
                             "A:  " +
-                                DateFormat.yMd().add_jm().format(
-                                    e.dateFin.add(new Duration(days: 5))) +
+                                DateFormat.yMd()
+                                    .add_jm()
+                                    .format(DateTime.parse(e.dateFin)) +
                                 "    ",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
@@ -179,11 +182,17 @@ Widget eventItem(Event e, BuildContext context) {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(height: 10.0),
-                        Text('De: ' + DateFormat('y/d/M').format(e.dateDebut),
+                        Text(
+                            'De: ' +
+                                DateFormat('y/d/M')
+                                    .format(DateTime.parse(e.dateDebut)),
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.w600)),
                         SizedBox(height: 15.0),
-                        Text('  A: ' + DateFormat('y/d/M').format(e.dateFin),
+                        Text(
+                            '  A: ' +
+                                DateFormat('y/d/M')
+                                    .format(DateTime.parse(e.dateFin)),
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.w600)),
                       ],
@@ -248,13 +257,14 @@ List splitEnum(List a) {
 
 Widget drawer(BuildContext context, {List<Widget> listWidget}) {
   return Drawer(
+      elevation: 10,
       child: Scaffold(
-    appBar: AppBar(),
-    body: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: listWidget,
-    ),
-  ));
+        appBar: AppBar(),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: listWidget,
+        ),
+      ));
 }
 
 // Ceci est une barre qui s'affiche en bas et qui contient un message

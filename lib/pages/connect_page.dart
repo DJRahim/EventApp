@@ -42,35 +42,44 @@ class ConnectPageState extends State<ConnectPage> {
           'auth/se_connecter?email=${c['email']}&password=${c['password']}', c);
 
       var b = jsonDecode(a);
-      // print(c);
+      print(c);
 
-      // print(b);
+      print(b);
 
       var home;
 
       switch (b['type']) {
         case 2:
           home = MyHomePageNormal();
+
           var user = await DBProvider.db.getAllUsers();
           var us = user[0].toMap();
 
-          // print(us);
+          print(us);
 
-          await auth.getRequest(
-              "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&chois=['1','2','3','4','5']&age=${us['age']}&num=${us['numtel']}&profesion=${us['profession']}&sex=${us['sexe']}",
-              {});
+          if (!prefs.getBool("upload")) {
+            await auth.getRequest(
+                "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&chois=['1','2','3','4','5']&age=${us['age']}&num=${us['numtel']}&profesion=${us['profession']}&sex=${us['sexe']}",
+                {});
+
+            prefs.setBool("upload", true);
+          }
+
           break;
         case 1:
           home = MyHomePagePublieur();
+          if (!prefs.getBool("upload")) {
+            var user = await DBProvider.db.getAllPubli();
+            var us = user[0].toMap();
 
-          var user = await DBProvider.db.getAllPubli();
-          var us = user[0].toMap();
+            // print(us);
 
-          // print(us);
+            // remplacer id_phone avec ${prefs.getString('registerId')}
 
-          await auth.getRequest(
-              "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&nom_organis=serbess&num=988786",
-              {});
+            await auth.getRequest(
+                "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&prenom=&id_phone=iuiuh&nom_organis=serbess&num=988786",
+                {});
+          }
           break;
         case 0:
           home = MyHomePageAdmin();

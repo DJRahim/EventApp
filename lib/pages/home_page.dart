@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'package:uic/list_uic.dart';
+import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:eventapp/tools/auth.dart' as auth;
 
 // Ca est la home page pour les utilisateurs qui ne sont pas connecter
 // Ca contient 2 boutons (1 pour connexion et 1 pour inscription)
@@ -18,12 +22,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
+  final GlobalKey _scaffoldKey = new GlobalKey();
+
+  ListUicController<Event> uic;
+
+  List<Event> listevent = List<Event>();
+
+  initlist() async {
+    var a = await auth.getRequest('affichage_public', {});
+
+    var b = jsonDecode(a);
+
+    print(b);
+
+    // listevent = b;
+  }
+
+  Future<List<Event>> _getItems(int page) async {
+    await Future.delayed(Duration(seconds: 1));
+    List<Event> list = new List<Event>();
+    int i = 0;
+    while ((i + (page - 1) * 7) < listevent.length && i < 7) {
+      list.add(listevent[(page - 1) * 7 + i]);
+      i++;
+    }
+
+    return list;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initlist();
+    uic = ListUicController<Event>(
+      onGetItems: (int page) => _getItems(page),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: drawer(
         context,
         listWidget: <Widget>[
+          SizedBox(height: 5),
           ListTile(
             title: Text("Se connecter"),
             onTap: () {
@@ -31,6 +74,7 @@ class MyHomePageState extends State<MyHomePage> {
               _connect();
             },
           ),
+          SizedBox(height: 5),
           ListTile(
             title: Text("S'inscrire"),
             onTap: () {
@@ -41,26 +85,27 @@ class MyHomePageState extends State<MyHomePage> {
         ],
       ),
       appBar: AppBar(
-        title: Text("Evenements culturels"),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                Navigator.pushNamed(context, '/search');
-              })
-        ],
-      ),
+          title: Text(
+            "",
+            style: Theme.of(context).textTheme.headline1,
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/search');
+                })
+          ],
+          iconTheme: new IconThemeData(color: Colors.blueGrey[800])),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(7.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            button(context, "connectez-vous", _connect),
-            SizedBox(
-              height: 25.0,
-            ),
-            button(context, "inscrivez-vous", _signup)
+            Container(
+                height: MediaQuery.of(context).size.height * 0.84,
+                child: listEvent(uic, context)),
+            SizedBox(height: 7),
           ],
         ),
       ),

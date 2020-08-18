@@ -36,13 +36,13 @@ class _RegisterPage3State extends State<RegisterPage3> {
       DBProvider.db.deleteAllPublieur();
 
       DBProvider.db.newPublieur(Publieur.fromMap({
-        'registerId': 'kjnoooo',
+        'registerId': prefs.getString("registerId"),
         'nom': c['nom'],
-        'prenom': c['prenom'],
         'email': prefs.getString('email'),
-        'numtel': 063737,
         'nomSociete': ""
       }));
+
+      prefs.setBool("upload", false);
 
       Scaffold.of(cont).showSnackBar(snackBar(
           'Inscription reussi! Veuillez valider votre email.', Colors.green));
@@ -88,15 +88,6 @@ class _RegisterPage3State extends State<RegisterPage3> {
                           FormBuilderTextField(
                             attribute: "nom",
                             decoration: theme("Nom"),
-                            validators: [
-                              FormBuilderValidators.required(
-                                  errorText: "Ce champs est obligatoire")
-                            ],
-                          ),
-                          SizedBox(height: 20.0),
-                          FormBuilderTextField(
-                            attribute: "prenom",
-                            decoration: theme("Prenom"),
                             validators: [
                               FormBuilderValidators.required(
                                   errorText: "Ce champs est obligatoire")

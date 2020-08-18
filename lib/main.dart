@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:eventapp/pages/ajouter_event.dart';
@@ -18,14 +19,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eventapp/tools/auth.dart' as auth;
 
 // Ceci est la page root de l'application (chaque fois l'application s,ouvre, ca passe par cette page)
-// Pour l'instant ca affiche 4 boutons (pour tester):
-// 1- pour passer a la page de non connection
-// 2- pour passer a la page de pas de compte
-// 1- pour passer a la page d'utilisateur normale
-// 1- pour passer a la page du publieur d'evenements
-// 1- pour passer a la page d'admin de l'app
 
 void main() {
   runApp(RootPage());
@@ -74,6 +70,21 @@ class RootPageState extends State<RootPage> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('on message $message');
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
       },
       onResume: (Map<String, dynamic> message) async {
         print('on resume $message');
@@ -92,11 +103,17 @@ class RootPageState extends State<RootPage> {
     });
   }
 
-  Future<void> initStatus() async {
+  initStatus() async {
     prefs = await SharedPreferences.getInstance();
 
+    var a = await auth.getRequest(
+        'notify/?id_phone=${prefs.getString("registerId")}&titre=titre&message=jdnoiendoe',
+        {});
+
+    print(jsonDecode(a));
+
     setState(() {
-      prefs.setInt('type', 1);
+      prefs.setInt('type', 3);
 
       status = prefs.getInt('type');
 
@@ -118,12 +135,11 @@ class RootPageState extends State<RootPage> {
 
   @override
   void initState() {
-    // on utilise le status pour choisir la home page adequat
-
-    initStatus();
-
     // Ca c'est pour gerer les notifications (c'est en commentaire pour tester d'autres fonctionnalites)
     firebaseCloudMessagingListeners();
+
+    // on utilise le status pour choisir la home page adequat
+    initStatus();
 
     // Ca c'est pour gerer la connectivite (s'il y a l'internet ou non)
     // S'il y a de l'internet ca passe au home page
@@ -222,9 +238,27 @@ class RootPageState extends State<RootPage> {
         primaryColor: Colors.lightBlue[800],
         accentColor: Colors.cyan[600],
 
+        textTheme: TextTheme(
+          headline1: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey[800]),
+          headline6: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w400,
+              color: Colors.blueGrey[800]),
+          bodyText2: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w100,
+              color: Colors.blueGrey[800]),
+        ),
+
         // Define the default font family.
         fontFamily: 'Georgia',
-        appBarTheme: AppBarTheme(elevation: 8, color: Colors.lightBlue[800]),
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          color: Colors.white,
+        ),
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:eventapp/classes/event.dart';
-import 'package:eventapp/classes/sous_type.dart';
-import 'package:eventapp/classes/type.dart';
+// import 'package:eventapp/classes/type.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -134,23 +133,23 @@ class SearchPageState extends State<SearchPage> {
                                     ],
                                   )),
                               SizedBox(height: 10),
-                              FormBuilderDropdown(
-                                attribute: "Type",
-                                decoration: theme("Type de l'evenement"),
-                                hint: Text('Selectionner type'),
-                                validators: [FormBuilderValidators.required()],
-                                items: splitEnum(Type.values.toList())
-                                    .map((value) => DropdownMenuItem(
-                                        value: value, child: Text("$value")))
-                                    .toList(),
-                              ),
-                              SizedBox(height: 10),
+                              // FormBuilderDropdown(
+                              //   attribute: "Type",
+                              //   decoration: theme("Type de l'evenement"),
+                              //   hint: Text('Selectionner type'),
+                              //   validators: [FormBuilderValidators.required()],
+                              //   items: splitEnum(Type.values.toList())
+                              //       .map((value) => DropdownMenuItem(
+                              //           value: value, child: Text("$value")))
+                              //       .toList(),
+                              // ),
+                              // SizedBox(height: 10),
                               FormBuilderDropdown(
                                 attribute: "Sous-type",
                                 decoration: theme("Sous-type de l'evenement"),
                                 hint: Text('Selectionner sous-type'),
                                 validators: [FormBuilderValidators.required()],
-                                items: splitEnum(SousType.values.toList())
+                                items: []
                                     .map((value) => DropdownMenuItem(
                                         value: value, child: Text("$value")))
                                     .toList(),

@@ -1,4 +1,14 @@
 enum Profession {
-  Etudiant,
-  Enseignant,
+  Sante,
+  Culture,
+  Education,
+  Ingenerie,
+  Finance,
+  Administration,
+  Construction,
+  Droit,
+  Sport,
+  Commerce,
+  Recherche,
+  Tourisme
 }

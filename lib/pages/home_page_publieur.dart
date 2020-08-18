@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uic/list_uic.dart';
-import '../tools/database.dart';
+import 'package:eventapp/tools/auth.dart' as auth;
 
 // Ceci est la home page du publieur
 // Ca contient la liste de ces evenements (pour l'instant juste une liste de test)
@@ -31,8 +32,16 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
 
   List<Event> listevent = List<Event>();
 
-  Future<void> initlist() async {
-    listevent = await DBProvider.db.getAllEvents();
+  initlist() async {
+    // var a = await auth.getRequest('affichage_public', {});
+
+    // var eventsJson = jsonDecode(a) as List;
+    // List<Event> events =
+    //     eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
+
+    // print(events);
+
+    // listevent = events;
   }
 
   Future<List<Event>> _getItems(int page) async {
@@ -43,6 +52,7 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
       list.add(listevent[(page - 1) * 7 + i]);
       i++;
     }
+
     return list;
   }
 
@@ -76,6 +86,7 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
                 Navigator.pushNamed(context, '/search');
               })
         ],
+        iconTheme: new IconThemeData(color: Colors.blueGrey[800]),
       ),
       body: Padding(
         padding: const EdgeInsets.all(7.0),

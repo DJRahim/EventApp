@@ -34,7 +34,7 @@ class DBProvider {
           "age TEXT,"
           "sexe TEXT,"
           "profession TEXT,"
-          "numtel INTEGER,"
+          "numtel TEXT,"
           "latitude REAL,"
           "longitude REAL"
           ")");
@@ -47,10 +47,9 @@ class DBProvider {
           "nomSociete TEXT"
           ")");
       await db.execute("CREATE TABLE Event ("
-          "id_event INTEGER,"
+          "id_event INTEGER PRIMARY KEY,"
           "nom TEXT,"
-          "nomOrganis TEXT,"
-          "prix REAL,"
+          "prix TEXT,"
           "nbPlaceDispo INTEGER,"
           "corps TEXT,"
           "datedebut TEXT,"
@@ -79,6 +78,14 @@ class DBProvider {
     var res = await db.insert("Event", newEvent.toMap());
     return res;
   }
+
+  // remplirSousType() async {
+  //   final db = await database;
+  //   var res = await db.insert("Sous_type", {
+
+  //   });
+  //   return res;
+  // }
 
   // updateUser(User newUser) async {
   //   final db = await database;
