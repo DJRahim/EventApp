@@ -4,10 +4,10 @@ import 'package:intl/intl.dart';
 
 class Event {
   String nom;
-  String corps;
+  String description;
   String dateDebut;
   String dateFin;
-  // String photoUrl;
+  String photo;
   Position pos;
   String nbPlaceDispo;
   String prix;
@@ -16,14 +16,14 @@ class Event {
   List age;
   List sexe;
   List domaine;
-  String email;
-  String numero;
-  String url;
+  String contactEmail;
+  String contactNum;
+  String contactLien;
   String lieu = "";
 
   Event(
       this.nom,
-      this.corps,
+      this.description,
       this.dateDebut,
       this.dateFin,
       this.pos,
@@ -34,9 +34,9 @@ class Event {
       this.age,
       this.sexe,
       this.domaine,
-      this.email,
-      this.numero,
-      this.url) {
+      this.contactEmail,
+      this.contactNum,
+      this.contactLien) {
     setLieu();
   }
 
@@ -49,7 +49,7 @@ class Event {
 
   Event.fromJson(Map<String, dynamic> json)
       : nom = json['nom'],
-        corps = json['corps'],
+        description = json['description'],
         dateDebut = new DateFormat('yyyy-MM-dd hh:mm:ss')
             .format(DateTime.parse(json['datedebut'])),
         dateFin = new DateFormat('yyyy-MM-dd hh:mm:ss')
@@ -57,23 +57,23 @@ class Event {
         nbPlaceDispo = json['nb_place_dispo'],
         prix = json['prix'],
         type = json['type'],
-        sousType = json['sous_type'],
+        sousType = json['sous-type'],
         age = json['age'],
         sexe = json['sexe'],
         domaine = json['domaine'],
-        email = json['email'],
-        numero = json['numero'],
-        url = json['url'],
-        // photoUrl = json['photo'],
+        contactEmail = json['contactEmail'],
+        contactNum = json['contactNum'],
+        contactLien = json['contactLien'],
+        photo = json['photo'],
         pos =
             Position(latitude: json['latitude'], longitude: json['longitude']);
 
   Map<String, dynamic> toJson() => {
         'nom': nom,
-        'corps': corps,
+        'description': description,
         'datedebut': dateDebut,
         'datefin': dateFin,
-        // 'photoUrl': photoUrl,
+        'photo': photo,
         'latitude': pos.latitude,
         'longitude': pos.longitude,
         'nb_place_dispo': nbPlaceDispo,
@@ -83,14 +83,14 @@ class Event {
         'age': age,
         'sexe': sexe,
         'domaine': domaine,
-        'email': email,
-        'numero': numero,
-        'url': url
+        'contactEmail': contactEmail,
+        'contactNum': contactNum,
+        'contactLien': contactLien
       };
 
   Event.fromMap(Map<String, dynamic> json)
       : nom = json['nom'],
-        corps = json['corps'],
+        description = json['description'],
         dateDebut = new DateFormat('yyyy-MM-dd hh:mm:ss')
             .format(DateTime.parse(json['datedebut'])),
         dateFin = new DateFormat('yyyy-MM-dd hh:mm:ss')
@@ -102,19 +102,19 @@ class Event {
         age = json['age'],
         sexe = json['sexe'],
         domaine = json['domaine'],
-        email = json['email'],
-        numero = json['numero'],
-        url = json['url'],
-        // photoUrl = json['photo'],
+        contactEmail = json['contactEmail'],
+        contactNum = json['contactNum'],
+        contactLien = json['contactLien'],
+        photo = json['photo'],
         pos =
             Position(latitude: json['latitude'], longitude: json['longitude']);
 
   Map<String, dynamic> toMap() => {
         'nom': nom,
-        'corps': corps,
+        'description': description,
         'datedebut': dateDebut,
         'datefin': dateFin,
-        // 'photoUrl': photoUrl,
+        'photo': photo,
         'latitude': pos.latitude,
         'longitude': pos.longitude,
         'nb_place_dispo': nbPlaceDispo,
@@ -124,8 +124,8 @@ class Event {
         'age': age,
         'sexe': sexe,
         'domaine': domaine,
-        'email': email,
-        'numero': numero,
-        'url': url
+        'contactEmail': contactEmail,
+        'contactNum': contactNum,
+        'contactLien': contactLien
       };
 }

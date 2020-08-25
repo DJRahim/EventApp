@@ -68,7 +68,6 @@ class _RegisterPage3State extends State<RegisterPage3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Builder(builder: (cont) {
         return Padding(
           padding: EdgeInsets.all(0),

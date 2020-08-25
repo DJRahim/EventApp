@@ -72,7 +72,6 @@ class RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Builder(builder: (cont) {
       return Scaffold(
-        appBar: AppBar(),
         body: Padding(
           padding: EdgeInsets.all(0),
           child: SingleChildScrollView(

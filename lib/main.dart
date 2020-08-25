@@ -60,6 +60,8 @@ class RootPageState extends State<RootPage> {
   }
 
   void firebaseCloudMessagingListeners() async {
+    prefs = await SharedPreferences.getInstance();
+
     if (Platform.isIOS) iOSPermission();
 
     _fcm.getToken().then((token) {
@@ -106,11 +108,85 @@ class RootPageState extends State<RootPage> {
   initStatus() async {
     prefs = await SharedPreferences.getInstance();
 
-    var a = await auth.getRequest(
-        'notify/?id_phone=${prefs.getString("registerId")}&titre=titre&message=jdnoiendoe',
-        {});
+    // Tester notification
+    // var a = await auth.getRequest(
+    //     'notify/?id_phone=${prefs.getString("registerId")}&titre=titre&message=jdnoiendoe',
+    //     {});
 
-    print(jsonDecode(a));
+    // print(jsonDecode(a));
+
+    // La liste des types et des sous-types
+
+    prefs.setStringList("type", [
+      "Music",
+      "Cinema",
+      "Loisirs",
+      "Theatre",
+      "Arts",
+      "Sport",
+      "Sante",
+      "Voyage",
+      "Fetes",
+      "Bienfaisance",
+      "Religion",
+    ]);
+
+    prefs.setStringList(
+        "Music", ["Rai", "Chaabi", "Traditionnel", "Rap", "Rock", "Jazz"]);
+
+    prefs.setStringList("Cinema", [
+      "Horreur",
+      "Comedie",
+      "Science-Fiction",
+      "Action",
+      "Aventure",
+      "Crime",
+      "Documentaire",
+      "Animation",
+      "Guerre",
+      "Romance",
+      "Mystere",
+      "Drama",
+      "Sport",
+      "Super-Heros",
+      "Historique"
+    ]);
+
+    prefs.setStringList("Loisirs",
+        ["Jeux", "Cirque", "Photographie", "dessin", "Peinture", "Lecture"]);
+
+    prefs.setStringList(
+        "Arts", ["Dance", "Beaux-Arts", "Art-litteraire", "Artisanat"]);
+
+    prefs.setStringList("Sport", [
+      "Football",
+      "Basketball",
+      "Handball",
+      "Volleyball",
+      "Natation",
+      "Automobile",
+      "Arts-martiaux"
+    ]);
+
+    prefs.setStringList(
+        "Sante", ["Ftness", "Sante-mentale", "Yoga", "Medecine-naturelle"]);
+
+    prefs.setStringList(
+        "Voyage", ["Escalade", "Voyages", "Visite", "Randonnee", "Camping"]);
+
+    prefs.setStringList("Fetes", [
+      "nationale",
+      "religieuse",
+      "Journee-nationale",
+      "Journee-mondiale",
+      "Activite-saisonniere"
+    ]);
+
+    prefs.setStringList("Bienfaisance",
+        ["Environnement", "Droit-humain", "animal", "Pauverete", "Nettoyage"]);
+
+    prefs.setStringList(
+        "Religion", ["concours", "cercle", "conference", "charite"]);
 
     setState(() {
       prefs.setInt('type', 3);
@@ -128,18 +204,18 @@ class RootPageState extends State<RootPage> {
           home = new MyHomePageAdmin();
           break;
         default:
-          home = new MyHomePage();
+          home = new EventWidget();
       }
     });
   }
 
   @override
   void initState() {
-    // Ca c'est pour gerer les notifications (c'est en commentaire pour tester d'autres fonctionnalites)
-    firebaseCloudMessagingListeners();
-
     // on utilise le status pour choisir la home page adequat
     initStatus();
+
+    // Ca c'est pour gerer les notifications (c'est en commentaire pour tester d'autres fonctionnalites)
+    firebaseCloudMessagingListeners();
 
     // Ca c'est pour gerer la connectivite (s'il y a l'internet ou non)
     // S'il y a de l'internet ca passe au home page

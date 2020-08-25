@@ -109,27 +109,172 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
           SizedBox(height: 20.0),
           Container(
             width: MediaQuery.of(context).size.width,
-            child: Card(
-                elevation: 6,
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        e.nom,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                      elevation: 6,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              e.nom,
+                              style: TextStyle(
+                                  fontSize: 28, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 10.0),
+                            Text(
+                              e.description,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w100),
+                            ),
+                            SizedBox(height: 20.0),
+                          ],
+                        ),
+                      )),
+                ),
+                SizedBox(height: 15.0),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    elevation: 6,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Nombre de place disponible : ",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            e.nbPlaceDispo,
+                            style: TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red[700],
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 20.0),
-                      Text(e.corps,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600)),
-                    ],
+                    ),
                   ),
-                )),
+                ),
+                SizedBox(height: 15.0),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    elevation: 6,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Cet evenement est :  ",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            e.prix + " ",
+                            style: TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.green[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15.0),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    elevation: 6,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Contact",
+                            style: TextStyle(
+                                fontSize: 21, fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(height: 10.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "email : ",
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w100),
+                              ),
+                              Text(
+                                e.contactEmail + " ",
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w100),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "numero : ",
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w100),
+                              ),
+                              Text(
+                                e.contactNum + " ",
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w100),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "URL : ",
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w100),
+                              ),
+                              Text(
+                                e.contactLien + " ",
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w100),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           )
         ],
       ),
@@ -259,7 +404,6 @@ Widget drawer(BuildContext context, {List<Widget> listWidget}) {
   return Drawer(
       elevation: 10,
       child: Scaffold(
-        appBar: AppBar(),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: listWidget,

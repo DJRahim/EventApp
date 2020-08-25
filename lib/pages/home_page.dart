@@ -29,13 +29,15 @@ class MyHomePageState extends State<MyHomePage> {
   List<Event> listevent = List<Event>();
 
   initlist() async {
-    var a = await auth.getRequest('affichage_public', {});
+    // var a = await auth.getRequest('affichage_public', {});
 
-    var b = jsonDecode(a);
+    // var eventsJson = jsonDecode(a) as List;
+    // List<Event> events =
+    //     eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
 
-    print(b);
+    // print(events);
 
-    // listevent = b;
+    // listevent = events;
   }
 
   Future<List<Event>> _getItems(int page) async {

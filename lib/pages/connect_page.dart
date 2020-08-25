@@ -114,7 +114,6 @@ class ConnectPageState extends State<ConnectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Builder(builder: (context) {
         return Padding(
           padding: EdgeInsets.all(0),

@@ -2,38 +2,23 @@ class Publieur {
   String nom;
   String email;
   String registerId;
-  int numtel;
-  String nomSociete;
+  String organisme;
 
-  Publieur(this.nom, this.email, this.numtel, this.registerId, this.nomSociete);
+  Publieur(this.nom, this.email, this.registerId, this.organisme);
 
   Publieur.fromJson(Map<String, dynamic> json)
-      : registerId = json['registerId'],
-        nom = json['nom'],
+      : nom = json['nom'],
         email = json['email'],
-        numtel = json['numtel'],
-        nomSociete = json['nomSociete'];
+        organisme = json['organisme'];
 
-  Map<String, dynamic> toJson() => {
-        'registerId': registerId,
-        'nom': nom,
-        'email': email,
-        'numtel': numtel,
-        'nomSociete': nomSociete
-      };
+  Map<String, dynamic> toJson() =>
+      {'nom': nom, 'email': email, 'organisme': organisme};
 
   Publieur.fromMap(Map<String, dynamic> json)
-      : registerId = json['registerId'],
-        nom = json['nom'],
+      : nom = json['nom'],
         email = json['email'],
-        numtel = json['numtel'],
-        nomSociete = json['nomSociete'];
+        organisme = json['organisme'];
 
-  Map<String, dynamic> toMap() => {
-        'registerId': registerId,
-        'nom': nom,
-        'email': email,
-        'numtel': numtel,
-        'nomSociete': nomSociete
-      };
+  Map<String, dynamic> toMap() =>
+      {'nom': nom, 'email': email, 'organisme': organisme};
 }

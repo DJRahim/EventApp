@@ -6,7 +6,7 @@ class Normal {
   String registerId;
   String age;
   String sexe;
-  String profession;
+  String domaine;
   Position location;
   List<String> listeInteret;
 
@@ -16,48 +16,44 @@ class Normal {
     this.registerId,
     this.age,
     this.sexe,
-    this.profession,
+    this.domaine,
     this.location,
   );
 
   Normal.fromJson(Map<String, dynamic> json)
-      : registerId = json['registerId'],
-        nom = json['nom'],
+      : nom = json['nom'],
         email = json['email'],
         age = json['age'],
         sexe = json['sexe'],
-        profession = json['profession'],
+        domaine = json['domaine'],
         location =
             Position(latitude: json['latitutde'], longitude: json['longitude']);
 
   Map<String, dynamic> toJson() => {
-        'registerId': registerId,
         'nom': nom,
         'email': email,
         'age': age,
         'sexe': sexe,
-        'profession': profession,
+        'domaine': domaine,
         'latitude': location.latitude,
         'longitude': location.longitude
       };
 
   Normal.fromMap(Map<String, dynamic> json)
-      : registerId = json['registerId'],
-        nom = json['nom'],
+      : nom = json['nom'],
         email = json['email'],
         age = json['age'],
         sexe = json['sexe'],
-        profession = json['profession'],
+        domaine = json['domaine'],
         location =
             Position(latitude: json['latitude'], longitude: json['longitude']);
 
   Map<String, dynamic> toMap() => {
-        'registerId': registerId,
         'nom': nom,
         'email': email,
         'age': age,
         'sexe': sexe,
-        'profession': profession,
+        'domaine': domaine,
         'latitude': location.latitude,
         'longitude': location.longitude
       };
