@@ -1,13 +1,14 @@
 class Publieur {
   String nom;
   String email;
-  String registerId;
   String organisme;
+  int idPub;
 
-  Publieur(this.nom, this.email, this.registerId, this.organisme);
+  Publieur(this.nom, this.email, this.organisme, this.idPub);
 
   Publieur.fromJson(Map<String, dynamic> json)
-      : nom = json['nom'],
+      : idPub = json['id_publieur'],
+        nom = json['nom'],
         email = json['email'],
         organisme = json['organisme'];
 

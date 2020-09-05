@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:eventapp/tools/auth.dart' as auth;
 import 'package:eventapp/classes/event.dart';
+import 'package:eventapp/tools/database.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -35,6 +36,8 @@ class AjouterEventState extends State<AjouterEvent> {
   var c = {};
   var d = {};
 
+  String suivant = "Suivant";
+
   SharedPreferences prefs;
   LocationResult place;
   int _index = 0;
@@ -63,6 +66,14 @@ class AjouterEventState extends State<AjouterEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Creation d'un evenement",
+          style: Theme.of(context).textTheme.headline1,
+          textAlign: TextAlign.center,
+        ),
+        iconTheme: new IconThemeData(color: Colors.blueGrey[800]),
+      ),
       body: Builder(builder: (cont) {
         return Padding(
           padding: EdgeInsets.all(10),
@@ -76,42 +87,49 @@ class AjouterEventState extends State<AjouterEvent> {
                   _index = index;
                 });
               },
-              onStepContinue: () {
-                setState(() {
-                  if (_index <= 3) {
-                    // Sauvegarder l'etape actuelle
-                    if (_formKey[_index].currentState.saveAndValidate()) {
-                      switch (_index) {
-                        case 0:
-                          a.addAll(_formKey[_index].currentState.value);
-                          print(a);
-                          _index++;
+              controlsBuilder: (context, {onStepCancel, onStepContinue}) {
+                return Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: button(context, suivant, () {
+                      setState(() {
+                        if (_index <= 3) {
+                          // Sauvegarder l'etape actuelle
+                          if (_formKey[_index].currentState.saveAndValidate()) {
+                            switch (_index) {
+                              case 0:
+                                a.addAll(_formKey[_index].currentState.value);
+                                print(a);
+                                _index++;
 
-                          break;
-                        case 1:
-                          b.addAll(_formKey[_index].currentState.value);
-                          print(b);
-                          _index++;
+                                break;
+                              case 1:
+                                b.addAll(_formKey[_index].currentState.value);
+                                print(b);
+                                _index++;
 
-                          break;
-                        case 2:
-                          c.addAll(_formKey[_index].currentState.value);
-                          print(c);
-                          _index++;
+                                break;
+                              case 2:
+                                c.addAll(_formKey[_index].currentState.value);
+                                print(c);
+                                _index++;
+                                suivant = "Valider";
 
-                          break;
-                        case 3:
-                          d.addAll(_formKey[_index].currentState.value);
-                          print(d);
-                          _confirm(cont);
-                          break;
-                        default:
-                      }
-                    }
-                  }
-                });
+                                break;
+                              case 3:
+                                d.addAll(_formKey[_index].currentState.value);
+                                print(d);
+                                _confirm(cont);
+                                break;
+                              default:
+                            }
+                          }
+                        }
+                      });
+                    }))
+                  ],
+                );
               },
-              onStepCancel: () {},
               steps: [
                 Step(
                   title: Text(""),
@@ -121,6 +139,8 @@ class AjouterEventState extends State<AjouterEvent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
+                        Text("Etape 1"),
+                        SizedBox(height: 15),
                         FormBuilderTextField(
                           attribute: "nom",
                           decoration: theme("Nom de l'evenement"),
@@ -186,7 +206,7 @@ class AjouterEventState extends State<AjouterEvent> {
                                 errorText: "Ce champs est obligatoire")
                           ],
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: 50),
                       ],
                     ),
                   ),
@@ -200,6 +220,7 @@ class AjouterEventState extends State<AjouterEvent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
+                        Text("Etape 2"),
                         SizedBox(height: 15),
                         FormBuilderTextField(
                           keyboardType: TextInputType.number,
@@ -233,8 +254,8 @@ class AjouterEventState extends State<AjouterEvent> {
                         SizedBox(height: 15),
                         FormBuilderDropdown(
                           attribute: "type",
-                          decoration: theme("Type de l'evenement"),
-                          hint: Text('Selectionner un type'),
+                          decoration: theme("Theme de l'evenement"),
+                          hint: Text('Selectionner un theme'),
                           // liste type
                           items: listType
                               .map((gender) => DropdownMenuItem(
@@ -253,8 +274,8 @@ class AjouterEventState extends State<AjouterEvent> {
                           visible: _visible,
                           child: FormBuilderDropdown(
                             attribute: "sous_type",
-                            decoration: theme("Sous-type de l'evenement"),
-                            hint: Text('Selectionner un sous-type'),
+                            decoration: theme("Sous-theme de l'evenement"),
+                            hint: Text('Selectionner un sous-theme'),
                             items: listSousType
                                 .map((gender) => DropdownMenuItem(
                                     value: gender, child: Text("$gender")))
@@ -265,7 +286,7 @@ class AjouterEventState extends State<AjouterEvent> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: 50),
                       ],
                     ),
                   ),
@@ -279,6 +300,7 @@ class AjouterEventState extends State<AjouterEvent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
+                        Text("Etape 3"),
                         SizedBox(height: 15),
                         FormBuilderFilterChip(
                           decoration: theme("Tranches d'age cibles"),
@@ -286,19 +308,19 @@ class AjouterEventState extends State<AjouterEvent> {
                           spacing: 3.0,
                           options: [
                             FormBuilderFieldOption(
-                              value: "mineur",
+                              value: "0-17",
                               child: Text("moins de 17 ans"),
                             ),
                             FormBuilderFieldOption(
-                              value: "jeune",
+                              value: "18-34",
                               child: Text("de 18 a 34 ans"),
                             ),
                             FormBuilderFieldOption(
-                              value: "homme",
+                              value: "35-59",
                               child: Text("de 35 a 59 ans"),
                             ),
                             FormBuilderFieldOption(
-                              value: "vieu",
+                              value: "60+",
                               child: Text("60 ans et plus"),
                             ),
                           ],
@@ -315,11 +337,11 @@ class AjouterEventState extends State<AjouterEvent> {
                           spacing: 3.0,
                           options: [
                             FormBuilderFieldOption(
-                              value: "Homme",
+                              value: "1",
                               child: Text("Hommes"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Femme",
+                              value: "2",
                               child: Text("Femmes"),
                             ),
                           ],
@@ -335,51 +357,51 @@ class AjouterEventState extends State<AjouterEvent> {
                           spacing: 3.0,
                           options: [
                             FormBuilderFieldOption(
-                              value: "Sante",
+                              value: "1",
                               child: Text("Sante"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Culture",
+                              value: "2",
                               child: Text("Culture"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Education",
+                              value: "3",
                               child: Text("Education"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Ingenerie",
+                              value: "4",
                               child: Text("Ingenerie"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Finance",
+                              value: "5",
                               child: Text("Finance"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Administration",
+                              value: "6",
                               child: Text("Administration"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Construction",
+                              value: "7",
                               child: Text("Construction"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Droit",
+                              value: "8",
                               child: Text("Droit"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Sport",
+                              value: "9",
                               child: Text("Sport"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Commerce",
+                              value: "10",
                               child: Text("Commerce"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Recherche",
+                              value: "11",
                               child: Text("Recherche"),
                             ),
                             FormBuilderFieldOption(
-                              value: "Tourisme",
+                              value: "12",
                               child: Text("Tourisme"),
                             ),
                           ],
@@ -389,7 +411,7 @@ class AjouterEventState extends State<AjouterEvent> {
                                     "Svp selectionnez les domaines d'exercices cibles")
                           ],
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: 50),
                       ],
                     ),
                   ),
@@ -403,6 +425,7 @@ class AjouterEventState extends State<AjouterEvent> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         //4 eme etape: Contact
+                        Text("Etape 4"),
                         SizedBox(height: 15),
                         FormBuilderTextField(
                           attribute: "email",
@@ -431,6 +454,7 @@ class AjouterEventState extends State<AjouterEvent> {
                                 errorText: "Ce champs doit etre un url")
                           ],
                         ),
+                        SizedBox(height: 50),
                       ],
                     ),
                   ),
@@ -485,13 +509,13 @@ class AjouterEventState extends State<AjouterEvent> {
       'photo': 'dcdc',
       'latitude': latitude,
       'longitude': longitude,
-      'nb_place_dispo': y['nb_place_dispo'].toString(),
+      'nbPlaceDispo': y['nb_place_dispo'].toString(),
       'prix': y['prix'],
       'type': y['type'],
-      'sous_type': y['sous_type'],
-      'age': y['age'],
-      'sexe': y['sexe'],
-      'domaine': y['domaine'],
+      'sousType': y['sous_type'],
+      'age': y['age'].toString(),
+      'sexe': y['sexe'].toString(),
+      'domaine': y['domaine'].toString(),
       'contactEmail': y['email'],
       'contactNum': y['numero'].toString(),
       'contactLien': y['url']
@@ -499,12 +523,76 @@ class AjouterEventState extends State<AjouterEvent> {
 
     var ar = event.toMap();
 
+    var profil = "";
+
+    for (var term in y['age']) {
+      profil = profil + term + ",";
+    }
+    for (var term in y['sexe']) {
+      var termstr = "";
+      switch (term) {
+        case 1:
+          termstr = "Homme";
+          break;
+        case 2:
+          termstr = "Femme";
+          break;
+      }
+      profil = profil + termstr + ",";
+    }
+    profil = profil + y["type"] + ",";
+
+    profil = profil + y["sous_type"] + ",";
+
+    for (var term in y['domaine']) {
+      var termstr = "";
+      switch (term) {
+        case 1:
+          termstr = "Sante";
+          break;
+        case 2:
+          termstr = "Culture";
+          break;
+        case 3:
+          termstr = "Education";
+          break;
+        case 4:
+          termstr = "Ingenerie";
+          break;
+        case 5:
+          termstr = "Finance";
+          break;
+        case 6:
+          termstr = "Administration";
+          break;
+        case 7:
+          termstr = "Construction";
+          break;
+        case 8:
+          termstr = "Droit";
+          break;
+        case 9:
+          termstr = "Sport";
+          break;
+        case 10:
+          termstr = "Commerce";
+          break;
+        case 11:
+          termstr = "Recherche";
+          break;
+        case 12:
+          termstr = "Tourisme";
+          break;
+      }
+      profil = profil + termstr + ",";
+    }
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print(prefs.getString('token'));
 
     var i = await auth.getRequest(
-        'profil/nouveau_evenement?token=${prefs.getString("token")}&Nom_Organisateur=serbess&categorie=festival&id_type=5&Nombre_de_place_disponible=${ar['nb_place_dispo']}&Prix=500&Date_debut=${ar['datedebut']}&Date_fin=${ar['datefin']}&Photo=oasoj&latitude=${ar['latitude']}&longitude=${ar['longitude']}&descritpion=${ar['corps']}',
+        'profil/nouveau_evenement?token=${prefs.getString("token")}&Nom_Organisateur=serbess&id_type=5&Nombre_de_place_disponible=${ar['nb_place_dispo']}&Prix=500&Date_debut=${ar['datedebut']}&Date_fin=${ar['datefin']}&Photo=oasoj&latitude=${ar['latitude']}&longitude=${ar['longitude']}&descritpion=${ar['corps']}&profile=$profil',
         {});
 
     var j = jsonDecode(i);
@@ -525,7 +613,7 @@ class AjouterEventState extends State<AjouterEvent> {
   _initType() async {
     prefs = await SharedPreferences.getInstance();
 
-    listType = prefs.getStringList("type");
+    listType = prefs.getStringList("Type");
   }
 
   setSousType(String type) async {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
+import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/pages/ajouter_event.dart';
 import 'package:eventapp/pages/connect_page.dart';
 import 'package:eventapp/pages/event_widget.dart';
@@ -88,8 +89,16 @@ class RootPageState extends State<RootPage> {
           ),
         );
       },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
+      onResume: (Map<String, dynamic> msg) async {
+        print('on resume $msg');
+        var id = msg['screen'];
+
+        var a = await auth.getRequest('serviceName/idevent=$id', {});
+        var b = jsonDecode(a);
+
+        var event = Event.fromJson(b);
+
+        Navigator.pushNamed(context, '/event', arguments: event);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('on launch $message');
@@ -109,6 +118,7 @@ class RootPageState extends State<RootPage> {
     prefs = await SharedPreferences.getInstance();
 
     // Tester notification
+
     // var a = await auth.getRequest(
     //     'notify/?id_phone=${prefs.getString("registerId")}&titre=titre&message=jdnoiendoe',
     //     {});
@@ -117,7 +127,7 @@ class RootPageState extends State<RootPage> {
 
     // La liste des types et des sous-types
 
-    prefs.setStringList("type", [
+    prefs.setStringList("Type", [
       "Music",
       "Cinema",
       "Loisirs",
@@ -155,8 +165,8 @@ class RootPageState extends State<RootPage> {
     prefs.setStringList("Loisirs",
         ["Jeux", "Cirque", "Photographie", "dessin", "Peinture", "Lecture"]);
 
-    prefs.setStringList(
-        "Arts", ["Dance", "Beaux-Arts", "Art-litteraire", "Artisanat"]);
+    prefs.setStringList("Arts",
+        ["Dance", "Beaux-Arts", "Art-litteraire", "Artisanat", "Opera"]);
 
     prefs.setStringList("Sport", [
       "Football",
@@ -189,8 +199,6 @@ class RootPageState extends State<RootPage> {
         "Religion", ["concours", "cercle", "conference", "charite"]);
 
     setState(() {
-      prefs.setInt('type', 3);
-
       status = prefs.getInt('type');
 
       switch (status) {
@@ -204,7 +212,7 @@ class RootPageState extends State<RootPage> {
           home = new MyHomePageAdmin();
           break;
         default:
-          home = new EventWidget();
+          home = new MyHomePage();
       }
     });
   }
@@ -223,60 +231,60 @@ class RootPageState extends State<RootPage> {
     // 1- Quitter
     // 2- Voir l'historique des evenements (ils sont stockes dans la base de donnees de l'app)
 
-    connectivitySubscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult connectivityResult) {
-      if (connectivityResult == ConnectivityResult.none) {
-        connect = ConnectivityResult.none;
-        nav.currentState.push(MaterialPageRoute(
-            builder: (BuildContext context) => WillPopScope(
-                  onWillPop: () async => false,
-                  child: Scaffold(
-                    body: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(height: 160),
-                          Icon(
-                            Icons.warning,
-                            size: 80,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            "Pas de connexion !",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: 65),
-                          button(context, "Quitter", quit),
-                          SizedBox(height: 40),
-                          Container(
-                            child: InkWell(
-                              child: Text(
-                                "Voir l'historique des evenements",
-                                style: TextStyle(
-                                  color: Colors.blue[600],
-                                  fontSize: 16,
-                                ),
-                              ),
-                              onTap: history,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )));
-      } else {
-        if (connect == ConnectivityResult.none) {
-          nav.currentState
-              .push(MaterialPageRoute(builder: (BuildContext context) => home));
-        }
-      }
-    });
+    // connectivitySubscription = Connectivity()
+    //     .onConnectivityChanged
+    //     .listen((ConnectivityResult connectivityResult) {
+    //   if (connectivityResult == ConnectivityResult.none) {
+    //     connect = ConnectivityResult.none;
+    //     nav.currentState.push(MaterialPageRoute(
+    //         builder: (BuildContext context) => WillPopScope(
+    //               onWillPop: () async => false,
+    //               child: Scaffold(
+    //                 body: Padding(
+    //                   padding: EdgeInsets.all(20),
+    //                   child: Column(
+    //                     mainAxisAlignment: MainAxisAlignment.start,
+    //                     crossAxisAlignment: CrossAxisAlignment.center,
+    //                     children: <Widget>[
+    //                       SizedBox(height: 160),
+    //                       Icon(
+    //                         Icons.warning,
+    //                         size: 80,
+    //                         color: Colors.grey,
+    //                       ),
+    //                       SizedBox(height: 20),
+    //                       Text(
+    //                         "Pas de connexion !",
+    //                         style: TextStyle(
+    //                             fontSize: 18, fontWeight: FontWeight.w500),
+    //                       ),
+    //                       SizedBox(height: 65),
+    //                       button(context, "Quitter", quit),
+    //                       SizedBox(height: 40),
+    //                       Container(
+    //                         child: InkWell(
+    //                           child: Text(
+    //                             "Voir l'historique des evenements",
+    //                             style: TextStyle(
+    //                               color: Colors.blue[600],
+    //                               fontSize: 16,
+    //                             ),
+    //                           ),
+    //                           onTap: history,
+    //                         ),
+    //                       )
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ),
+    //             )));
+    //   } else {
+    //     if (connect == ConnectivityResult.none) {
+    //       nav.currentState
+    //           .push(MaterialPageRoute(builder: (BuildContext context) => home));
+    //     }
+    //   }
+    // });
 
     super.initState();
   }

@@ -1,8 +1,10 @@
+import 'package:eventapp/tools/widgets.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
 class Event {
+  int idEvent;
   String nom;
   String description;
   String dateDebut;
@@ -13,15 +15,16 @@ class Event {
   String prix;
   String type;
   String sousType;
-  List age;
-  List sexe;
-  List domaine;
+  String age;
+  String sexe;
+  String domaine;
   String contactEmail;
   String contactNum;
   String contactLien;
   String lieu = "";
 
   Event(
+      this.idEvent,
       this.nom,
       this.description,
       this.dateDebut,
@@ -36,7 +39,8 @@ class Event {
       this.domaine,
       this.contactEmail,
       this.contactNum,
-      this.contactLien) {
+      this.contactLien,
+      this.photo) {
     setLieu();
   }
 
@@ -48,23 +52,18 @@ class Event {
   }
 
   Event.fromJson(Map<String, dynamic> json)
-      : nom = json['nom'],
-        description = json['description'],
-        dateDebut = new DateFormat('yyyy-MM-dd hh:mm:ss')
-            .format(DateTime.parse(json['datedebut'])),
-        dateFin = new DateFormat('yyyy-MM-dd hh:mm:ss')
-            .format(DateTime.parse(json['datefin'])),
-        nbPlaceDispo = json['nb_place_dispo'],
-        prix = json['prix'],
-        type = json['type'],
-        sousType = json['sous-type'],
-        age = json['age'],
-        sexe = json['sexe'],
-        domaine = json['domaine'],
-        contactEmail = json['contactEmail'],
-        contactNum = json['contactNum'],
-        contactLien = json['contactLien'],
-        photo = json['photo'],
+      : idEvent = json['id_evenment'],
+        nom = json['Nom_Organisateur'],
+        description = json['descritpion'],
+        dateDebut = json['Date_debut'],
+        dateFin = json['Date_fin'],
+        nbPlaceDispo = json['Nombre_de_place_disponible'].toString(),
+        prix = json['Prix'],
+        type = idTypeToNom(json['id_type']),
+        contactEmail = json['contact_email'],
+        contactNum = json['contact_num'],
+        contactLien = json['contact_lien'],
+        photo = json['Photo'],
         pos =
             Position(latitude: json['latitude'], longitude: json['longitude']);
 
@@ -76,10 +75,10 @@ class Event {
         'photo': photo,
         'latitude': pos.latitude,
         'longitude': pos.longitude,
-        'nb_place_dispo': nbPlaceDispo,
+        'nbPlaceDispo': nbPlaceDispo,
         'prix': prix,
         'type': type,
-        'sous_type': sousType,
+        'sousType': sousType,
         'age': age,
         'sexe': sexe,
         'domaine': domaine,
@@ -95,10 +94,10 @@ class Event {
             .format(DateTime.parse(json['datedebut'])),
         dateFin = new DateFormat('yyyy-MM-dd hh:mm:ss')
             .format(DateTime.parse(json['datefin'])),
-        nbPlaceDispo = json['nb_place_dispo'],
+        nbPlaceDispo = json['nbPlaceDispo'],
         prix = json['prix'],
         type = json['type'],
-        sousType = json['sous_type'],
+        sousType = json['sousType'],
         age = json['age'],
         sexe = json['sexe'],
         domaine = json['domaine'],
@@ -110,22 +109,22 @@ class Event {
             Position(latitude: json['latitude'], longitude: json['longitude']);
 
   Map<String, dynamic> toMap() => {
-        'nom': nom,
-        'description': description,
-        'datedebut': dateDebut,
-        'datefin': dateFin,
-        'photo': photo,
+        'nom': nom.toString(),
+        'description': description.toString(),
+        'datedebut': dateDebut.toString(),
+        'datefin': dateFin.toString(),
+        'photo': photo.toString(),
         'latitude': pos.latitude,
         'longitude': pos.longitude,
-        'nb_place_dispo': nbPlaceDispo,
-        'prix': prix,
-        'type': type,
-        'sous_type': sousType,
-        'age': age,
-        'sexe': sexe,
-        'domaine': domaine,
-        'contactEmail': contactEmail,
-        'contactNum': contactNum,
-        'contactLien': contactLien
+        'nbPlaceDispo': nbPlaceDispo.toString(),
+        'prix': prix.toString(),
+        'type': type.toString(),
+        'sousType': sousType.toString(),
+        'age': age.toString(),
+        'sexe': sexe.toString(),
+        'domaine': domaine.toString(),
+        'contactEmail': contactEmail.toString(),
+        'contactNum': contactNum.toString(),
+        'contactLien': contactLien.toString()
       };
 }

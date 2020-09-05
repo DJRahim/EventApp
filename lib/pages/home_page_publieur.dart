@@ -33,15 +33,17 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
   List<Event> listevent = List<Event>();
 
   initlist() async {
-    // var a = await auth.getRequest('affichage_public', {});
+    // API
 
-    // var eventsJson = jsonDecode(a) as List;
-    // List<Event> events =
-    //     eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
+    var a = await auth.getRequest('affichage_public', {});
 
-    // print(events);
+    var eventsJson = jsonDecode(a) as List;
+    List<Event> events =
+        eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
 
-    // listevent = events;
+    print(events);
+
+    listevent = events;
   }
 
   Future<List<Event>> _getItems(int page) async {
@@ -94,7 +96,7 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
           children: <Widget>[
             Container(
                 height: MediaQuery.of(context).size.height * 0.84,
-                child: listEvent(uic, context)),
+                child: listEvent(uic, context, "Modifier")),
             SizedBox(height: 7),
             button(context, "Ajouter evenement", action)
           ],

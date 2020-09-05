@@ -23,9 +23,13 @@ dependencies:
   http: ^0.12.2
   device_info: ^0.4.2+4
   shared_preferences: ^0.5.8
-  geolocator: ^5.3.2+2
+
+  geolocator: ^5.3.0
   google_maps_flutter: ^0.5.28+1
   location: ^3.0.2
+  permission_handler: ^4.4.0+hotfix.4
+  android_intent: ^0.3.7+3
+  
   geocoder: ^0.2.1
   uic: ^0.5.0
   connectivity: ^0.4.9
@@ -70,7 +74,19 @@ flutter:
   uses-material-design: true
 
   assets:
-   - assets/event.jpg
+   - assets/Music.jpg
+   - assets/Arts.jpg
+   - assets/Bienfaisance.jpg
+   - assets/Cinema.jpg
+   - assets/Fetes.jpg
+   - assets/Loisirs.jpg
+   - assets/Religion.jpg
+   - assets/Sante.jpg
+   - assets/Sport.jpg
+   - assets/Theatre.jpg
+   - assets/Voyage.jpg
+   - assets/Autre.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

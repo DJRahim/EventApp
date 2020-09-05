@@ -4,7 +4,6 @@ import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../tools/database.dart';
 
 // Cette page contient la 2eme forme pour les infos supplementaire (pour l'utilisateur normale)
@@ -36,10 +35,9 @@ class _RegisterPage3State extends State<RegisterPage3> {
       DBProvider.db.deleteAllPublieur();
 
       DBProvider.db.newPublieur(Publieur.fromMap({
-        'registerId': prefs.getString("registerId"),
         'nom': c['nom'],
         'email': prefs.getString('email'),
-        'nomSociete': ""
+        'organisme': c['organisme']
       }));
 
       prefs.setBool("upload", false);
@@ -68,6 +66,14 @@ class _RegisterPage3State extends State<RegisterPage3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Inscription d'un publieur",
+          style: Theme.of(context).textTheme.headline1,
+          textAlign: TextAlign.center,
+        ),
+        iconTheme: new IconThemeData(color: Colors.blueGrey[800]),
+      ),
       body: Builder(builder: (cont) {
         return Padding(
           padding: EdgeInsets.all(0),
@@ -94,8 +100,8 @@ class _RegisterPage3State extends State<RegisterPage3> {
                           ),
                           SizedBox(height: 20.0),
                           FormBuilderTextField(
-                            attribute: "nomSociete",
-                            decoration: theme("Nom Societe"),
+                            attribute: "organisme",
+                            decoration: theme("Nom organisme"),
                             validators: [
                               FormBuilderValidators.required(
                                   errorText: "Ce champs est obligatoire")
@@ -108,11 +114,11 @@ class _RegisterPage3State extends State<RegisterPage3> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                          child: button(context, "Confirmer", () {
+                          child: button(context, "Valider", () {
                         confirm(cont);
                       })),
                       SizedBox(width: 20),
-                      Expanded(child: button(context, "reset", reset))
+                      Expanded(child: button(context, "Effacer", reset))
                     ],
                   )
                 ],

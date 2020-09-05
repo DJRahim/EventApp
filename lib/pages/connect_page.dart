@@ -3,6 +3,7 @@ import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/pages/home_page_admin.dart';
 import 'package:eventapp/pages/home_page_normal.dart';
 import 'package:eventapp/pages/home_page_publieur.dart';
+import 'package:eventapp/pages/register_page.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -57,9 +58,28 @@ class ConnectPageState extends State<ConnectPage> {
 
           print(us);
 
+          var sexe = 0;
+          switch (us['sexe']) {
+            case "Homme":
+              sexe = 1;
+              break;
+            case "Femme":
+              sexe = 2;
+              break;
+          }
+
+          var profil = us['age'] +
+              "," +
+              us['sexe'] +
+              "," +
+              us['chois'] +
+              "," +
+              us['domaine'] +
+              ",";
+
           if (!prefs.getBool("upload")) {
             await auth.getRequest(
-                "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&prenom=${us['prenom']}&id_phone=${prefs.getString('registerId')}&chois=['1','2','3','4','5']&age=${us['age']}&num=${us['numtel']}&profesion=${us['profession']}&sex=${us['sexe']}",
+                "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&id_phone=${prefs.getString('registerId')}&chois=[${us['chois']}]&age=${us['age']}&profesion=${us['domaine']}&sex=$sexe&latitude=${us['latitude']}&longitude=${us['longitude']}&profil=$profil",
                 {});
 
             prefs.setBool("upload", true);
@@ -74,14 +94,14 @@ class ConnectPageState extends State<ConnectPage> {
 
             // print(us);
 
-            // remplacer id_phone avec ${prefs.getString('registerId')}
-
             await auth.getRequest(
-                "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&prenom=&id_phone=iuiuh&nom_organis=serbess&num=988786",
+                "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&id_phone=${prefs.getString('registerId')}&nom_organis=${us['organisme']}",
                 {});
           }
+
           break;
         case 0:
+          prefs.setInt("type", 0);
           home = MyHomePageAdmin();
           break;
         default:
@@ -111,9 +131,24 @@ class ConnectPageState extends State<ConnectPage> {
     }
   }
 
+  inscrire() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => RegisterPage()),
+        ModalRoute.withName('/'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Connexion",
+          style: Theme.of(context).textTheme.headline1,
+          textAlign: TextAlign.center,
+        ),
+        iconTheme: new IconThemeData(color: Colors.blueGrey[800]),
+      ),
       body: Builder(builder: (context) {
         return Padding(
           padding: EdgeInsets.all(0),
@@ -160,11 +195,25 @@ class ConnectPageState extends State<ConnectPage> {
                           Row(
                             children: <Widget>[
                               Expanded(
-                                  child: button(context, "Confirmer",
+                                  child: button(context, "Valider",
                                       () => _confirm(context))),
                               SizedBox(width: 20),
-                              Expanded(child: button(context, "reset", _reset))
+                              Expanded(
+                                  child: button(context, "Effacer", _reset))
                             ],
+                          ),
+                          SizedBox(height: 50.0),
+                          Container(
+                            child: InkWell(
+                              child: Text(
+                                "Vous pouvez s'inscrire si vous n'avez pas un compte",
+                                style: TextStyle(
+                                  color: Colors.blue[600],
+                                  fontSize: 16,
+                                ),
+                              ),
+                              onTap: inscrire,
+                            ),
                           )
                         ],
                       ),

@@ -26,18 +26,27 @@ class MyHomePageState extends State<MyHomePage> {
 
   ListUicController<Event> uic;
 
+  Color c1 = Colors.grey[300];
+  Color c2 = Colors.white;
+
   List<Event> listevent = List<Event>();
 
-  initlist() async {
-    // var a = await auth.getRequest('affichage_public', {});
+  initlist(int a) async {
+    var x;
 
-    // var eventsJson = jsonDecode(a) as List;
-    // List<Event> events =
-    //     eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
+    switch (a) {
+      case 1:
+        x = await auth.getRequest('affichage_public', {});
+        break;
+      case 2:
+        x = await auth.getRequest('autre', {});
+        break;
+    }
 
-    // print(events);
+    var eventsMap = jsonDecode(x) as Map<String, dynamic>;
+    var list = eventsMap.entries.map((e) => Event.fromJson(e.value)).toList();
 
-    // listevent = events;
+    listevent = list;
   }
 
   Future<List<Event>> _getItems(int page) async {
@@ -55,7 +64,7 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    initlist();
+    initlist(1);
     uic = ListUicController<Event>(
       onGetItems: (int page) => _getItems(page),
     );
@@ -68,9 +77,12 @@ class MyHomePageState extends State<MyHomePage> {
       drawer: drawer(
         context,
         listWidget: <Widget>[
-          SizedBox(height: 5),
+          SizedBox(height: 30),
           ListTile(
-            title: Text("Se connecter"),
+            title: Text(
+              "Se connecter",
+              style: TextStyle(fontSize: 17),
+            ),
             onTap: () {
               Navigator.pop(context);
               _connect();
@@ -78,7 +90,10 @@ class MyHomePageState extends State<MyHomePage> {
           ),
           SizedBox(height: 5),
           ListTile(
-            title: Text("S'inscrire"),
+            title: Text(
+              "S'inscrire",
+              style: TextStyle(fontSize: 17),
+            ),
             onTap: () {
               Navigator.pop(context);
               _signup();
@@ -105,8 +120,67 @@ class MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             Container(
-                height: MediaQuery.of(context).size.height * 0.84,
-                child: listEvent(uic, context)),
+              width: MediaQuery.of(context).size.width,
+              height: 30,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: Expanded(
+                        child: InkWell(
+                      child: Container(
+                        color: c1,
+                        child: Center(
+                          child: Text(
+                            "Evenement de l'application",
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          c1 = Colors.grey[300];
+                          c2 = Colors.white;
+                          initlist(1);
+                          uic = ListUicController<Event>(
+                            onGetItems: (int page) => _getItems(page),
+                          );
+                        });
+                      },
+                    )),
+                  ),
+                  Container(
+                    child: Expanded(
+                        child: InkWell(
+                      child: Container(
+                        color: c2,
+                        child: Center(
+                          child: Text(
+                            "Autres",
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          c2 = Colors.grey[300];
+                          c1 = Colors.white;
+                          initlist(2);
+                          uic = ListUicController<Event>(
+                            onGetItems: (int page) => _getItems(page),
+                          );
+                        });
+                      },
+                    )),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 2,
+            ),
+            Container(
+                height: MediaQuery.of(context).size.height * 0.83,
+                child: listEvent(uic, context, "Participer")),
             SizedBox(height: 7),
           ],
         ),

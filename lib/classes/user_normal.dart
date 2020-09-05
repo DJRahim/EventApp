@@ -3,22 +3,14 @@ import 'package:geolocator/geolocator.dart';
 class Normal {
   String nom;
   String email;
-  String registerId;
   String age;
   String sexe;
   String domaine;
   Position location;
-  List<String> listeInteret;
+  String listeInteret;
 
-  Normal(
-    this.nom,
-    this.email,
-    this.registerId,
-    this.age,
-    this.sexe,
-    this.domaine,
-    this.location,
-  );
+  Normal(this.nom, this.email, this.age, this.sexe, this.domaine, this.location,
+      this.listeInteret);
 
   Normal.fromJson(Map<String, dynamic> json)
       : nom = json['nom'],
@@ -26,8 +18,11 @@ class Normal {
         age = json['age'],
         sexe = json['sexe'],
         domaine = json['domaine'],
-        location =
-            Position(latitude: json['latitutde'], longitude: json['longitude']);
+        location = Position(
+          latitude: json['latitutde'],
+          longitude: json['longitude'],
+        ),
+        listeInteret = json['chois'];
 
   Map<String, dynamic> toJson() => {
         'nom': nom,
@@ -36,7 +31,8 @@ class Normal {
         'sexe': sexe,
         'domaine': domaine,
         'latitude': location.latitude,
-        'longitude': location.longitude
+        'longitude': location.longitude,
+        'chois': listeInteret
       };
 
   Normal.fromMap(Map<String, dynamic> json)
@@ -45,8 +41,11 @@ class Normal {
         age = json['age'],
         sexe = json['sexe'],
         domaine = json['domaine'],
-        location =
-            Position(latitude: json['latitude'], longitude: json['longitude']);
+        location = Position(
+          latitude: json['latitude'],
+          longitude: json['longitude'],
+        ),
+        listeInteret = json['chois'];
 
   Map<String, dynamic> toMap() => {
         'nom': nom,
@@ -55,6 +54,7 @@ class Normal {
         'sexe': sexe,
         'domaine': domaine,
         'latitude': location.latitude,
-        'longitude': location.longitude
+        'longitude': location.longitude,
+        'chois': listeInteret
       };
 }

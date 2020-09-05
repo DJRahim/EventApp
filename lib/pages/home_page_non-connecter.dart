@@ -54,7 +54,7 @@ class NoConnectionState extends State<NoConnection> {
       appBar: AppBar(
         title: Text("Historique des evenements"),
       ),
-      body: listEvent(uic, context),
+      body: listEvent(uic, context, ""),
       backgroundColor: Colors.white,
     );
   }

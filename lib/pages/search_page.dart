@@ -1,12 +1,12 @@
+import 'dart:convert';
 import 'package:eventapp/classes/event.dart';
-// import 'package:eventapp/classes/type.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uic/list_uic.dart';
 import 'package:intl/intl.dart';
-
-import '../tools/database.dart';
+import 'package:eventapp/tools/auth.dart' as auth;
 
 // Ceci est la page de recherche
 // Elle permet d'effectuer des recherche avec filtrage
@@ -29,12 +29,12 @@ class SearchPageState extends State<SearchPage> {
 
   bool _filterstate = true;
   bool _liststate = false;
+  bool _visible = false;
+  SharedPreferences prefs;
+  List listType = List<String>();
+  List listSousType = List<String>();
 
   List<Event> listevent = List<Event>();
-
-  Future<void> initlist() async {
-    listevent = await DBProvider.db.getAllEvents();
-  }
 
   Future<List<Event>> _getItems(int page) async {
     await Future.delayed(Duration(seconds: 2));
@@ -47,15 +47,33 @@ class SearchPageState extends State<SearchPage> {
     return list;
   }
 
-  void action() {
-    uic = ListUicController<Event>(
-      onGetItems: (int page) => _getItems(page),
-    );
+  Future<void> action() async {
+    if (_formKey.currentState.saveAndValidate()) {
+      var a = {};
+      a.addAll(_formKey.currentState.value);
+
+      var x = await auth.getRequest(
+          'recherche?type=${a['type']}&soustype=${a['sous_type']}&next=${a['next']}',
+          {});
+
+      var eventsJson = jsonDecode(x) as List;
+      List<Event> events =
+          eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
+
+      print(events);
+
+      listevent = events;
+
+      uic = ListUicController<Event>(
+        onGetItems: (int page) => _getItems(page),
+      );
+      print(a);
+    }
   }
 
   @override
   void initState() {
-    initlist();
+    _initType();
     super.initState();
   }
 
@@ -70,18 +88,12 @@ class SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          controller: ctrl,
-          autofocus: false,
-          decoration: theme("Rechercher"),
-          onSubmitted: (str) {
-            setState(() {
-              _filterstate = false;
-              _liststate = true;
-              action();
-            });
-          },
+        title: Text(
+          "Rechercher des evenements",
+          style: Theme.of(context).textTheme.headline1,
+          textAlign: TextAlign.center,
         ),
+        iconTheme: new IconThemeData(color: Colors.blueGrey[800]),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -92,6 +104,7 @@ class SearchPageState extends State<SearchPage> {
             children: <Widget>[
               Visibility(
                 replacement: Card(
+                  elevation: 3,
                   child: Padding(
                     padding: const EdgeInsets.all(6),
                     child: FlatButton(
@@ -110,8 +123,8 @@ class SearchPageState extends State<SearchPage> {
                 ),
                 visible: _filterstate,
                 child: Card(
+                  elevation: 3,
                   child: Container(
-                    height: 460,
                     child: Padding(
                       padding: const EdgeInsets.all(6),
                       child: FormBuilder(
@@ -133,52 +146,56 @@ class SearchPageState extends State<SearchPage> {
                                     ],
                                   )),
                               SizedBox(height: 10),
-                              // FormBuilderDropdown(
-                              //   attribute: "Type",
-                              //   decoration: theme("Type de l'evenement"),
-                              //   hint: Text('Selectionner type'),
-                              //   validators: [FormBuilderValidators.required()],
-                              //   items: splitEnum(Type.values.toList())
-                              //       .map((value) => DropdownMenuItem(
-                              //           value: value, child: Text("$value")))
-                              //       .toList(),
-                              // ),
-                              // SizedBox(height: 10),
                               FormBuilderDropdown(
-                                attribute: "Sous-type",
-                                decoration: theme("Sous-type de l'evenement"),
-                                hint: Text('Selectionner sous-type'),
-                                validators: [FormBuilderValidators.required()],
-                                items: []
-                                    .map((value) => DropdownMenuItem(
-                                        value: value, child: Text("$value")))
+                                attribute: "type",
+                                decoration: theme("Theme de l'evenement"),
+                                hint: Text('Selectionner un theme'),
+                                // liste type
+                                items: listType
+                                    .map((type) => DropdownMenuItem(
+                                        value: type, child: Text("$type")))
                                     .toList(),
+                                onChanged: (value) {
+                                  setSousType(value);
+                                },
+                              ),
+                              SizedBox(height: 15),
+                              Visibility(
+                                visible: _visible,
+                                child: FormBuilderDropdown(
+                                  attribute: "sous_type",
+                                  decoration:
+                                      theme("Sous-theme de l'evenement"),
+                                  hint: Text('Selectionner un sous-theme'),
+                                  items: listSousType
+                                      .map((type) => DropdownMenuItem(
+                                          value: type, child: Text("$type")))
+                                      .toList(),
+                                ),
                               ),
                               SizedBox(height: 10),
                               FormBuilderChoiceChip(
                                 attribute: "date",
-                                decoration: theme("Date"),
+                                decoration: theme("Date de deroulement"),
+                                spacing: 3.0,
                                 options: [
                                   FormBuilderFieldOption(
-                                      child: Text("Aujourd'hui"),
-                                      value: "today"),
+                                    child: Text("Cette semaine"),
+                                    value: "this_week",
+                                  ),
                                   FormBuilderFieldOption(
-                                      child: Text("Demain"), value: "tomorrow"),
+                                    child: Text("Ce mois"),
+                                    value: "this_month",
+                                  ),
                                   FormBuilderFieldOption(
-                                      child: Text("Prochaine semaine"),
-                                      value: "next_week"),
+                                    child: Text("Cette annee"),
+                                    value: "this_year",
+                                  ),
                                   FormBuilderFieldOption(
-                                      child: Text("Prochaine mois"),
-                                      value: "next_month"),
+                                    child: Text("Tout"),
+                                    value: "all",
+                                  ),
                                 ],
-                                validators: [],
-                              ),
-                              SizedBox(height: 10),
-                              FormBuilderDateTimePicker(
-                                attribute: "date",
-                                inputType: InputType.date,
-                                format: DateFormat("dd-MM-yyyy"),
-                                decoration: theme("ou choisir une date"),
                               ),
                               SizedBox(height: 10),
                               button(context, "rechercher", () {
@@ -187,7 +204,10 @@ class SearchPageState extends State<SearchPage> {
                                   _liststate = true;
                                   action();
                                 });
-                              })
+                              }),
+                              SizedBox(
+                                height: 5,
+                              )
                             ],
                           )),
                     ),
@@ -199,11 +219,27 @@ class SearchPageState extends State<SearchPage> {
                   visible: _liststate,
                   child: Container(
                       height: MediaQuery.of(context).size.height * 0.83,
-                      child: listEvent(uic, context))),
+                      child: listEvent(uic, context, "Participer"))),
             ],
           ),
         ),
       ),
     );
+  }
+
+  _initType() async {
+    prefs = await SharedPreferences.getInstance();
+
+    listType = prefs.getStringList("Type");
+  }
+
+  setSousType(String type) async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (type != "Theatre") {
+        listSousType = prefs.getStringList(type);
+        _visible = true;
+      }
+    });
   }
 }

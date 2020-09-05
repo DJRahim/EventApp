@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:eventapp/tools/auth.dart' as auth;
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class RegisterPageState extends State<RegisterPage> {
     _formKey.currentState.reset();
   }
 
-  // une methode pour valider et envoyer
+  // une methode pour valider et envoyer a l'api
   void _confirm(BuildContext cont) async {
     if (_formKey.currentState.saveAndValidate()) {
       Map<String, String> c = Map.from(_formKey.currentState.value);
@@ -89,6 +88,7 @@ class RegisterPageState extends State<RegisterPage> {
                           FormBuilderChoiceChip(
                             decoration: theme("Type de compte :"),
                             attribute: "type",
+                            spacing: 3.0,
                             options: [
                               FormBuilderFieldOption(
                                 value: "2",
@@ -121,11 +121,25 @@ class RegisterPageState extends State<RegisterPage> {
                             attribute: "password",
                             decoration: theme("mot de passe"),
                             validators: [
-                              FormBuilderValidators.minLength(6,
+                              FormBuilderValidators.minLength(5,
                                   errorText:
-                                      "mot de passe doit etre > a 8 caracteres"),
+                                      "mot de passe doit etre > a 5 caracteres"),
                               FormBuilderValidators.required(
                                   errorText: "Ce champs est obligatoire")
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          FormBuilderTextField(
+                            obscureText: true,
+                            maxLines: 1,
+                            attribute: "password1",
+                            decoration: theme("Confirmer mot de passe"),
+                            validators: [
+                              FormBuilderValidators.minLength(5,
+                                  errorText:
+                                      "mot de passe doit etre > a 5 caracteres"),
+                              FormBuilderValidators.required(
+                                  errorText: "Ce champs est obligatoire"),
                             ],
                           ),
                           SizedBox(height: 20.0),

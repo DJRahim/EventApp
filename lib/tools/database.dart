@@ -33,7 +33,8 @@ class DBProvider {
           "sexe TEXT,"
           "domaine TEXT,"
           "latitude REAL,"
-          "longitude REAL"
+          "longitude REAL,"
+          "chois TEXT"
           ")");
       await db.execute("CREATE TABLE Publieur ("
           "nom TEXT,"
@@ -43,11 +44,11 @@ class DBProvider {
       await db.execute("CREATE TABLE Event ("
           "nom TEXT,"
           "prix TEXT,"
-          "nbPlaceDispo INTEGER,"
+          "nbPlaceDispo TEXT,"
           "datedebut TEXT,"
           "datefin TEXT,"
           "latitude REAL,"
-          "longitude REAL"
+          "longitude REAL,"
           "contactEmail TEXT,"
           "contactNum TEXT,"
           "contactLien TEXT,"
@@ -79,21 +80,6 @@ class DBProvider {
     var res = await db.insert("Event", newEvent.toMap());
     return res;
   }
-
-  // remplirSousType() async {
-  //   final db = await database;
-  //   var res = await db.insert("Sous_type", {
-
-  //   });
-  //   return res;
-  // }
-
-  // updateUser(User newUser) async {
-  //   final db = await database;
-  //   var res = await db.update("User", newUser.toMap(),
-  //       where: "id = ?", whereArgs: [newUser.id]);
-  //   return res;
-  // }
 
   getUser(String email) async {
     final db = await database;
@@ -156,7 +142,8 @@ class DBProvider {
 
   deleteEvent() async {
     final db = await database;
-    return db.delete("Event", where: "nom = ?", whereArgs: ['demo']);
+    return db
+        .delete("Event", where: "nom != ?", whereArgs: ['Camping a Bouchaoui']);
   }
 
   deleteAllPublieur() async {

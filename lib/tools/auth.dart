@@ -17,7 +17,7 @@ const String _applicationId = "my_application_id";
 const String _storageKeyMobileToken = "token";
 
 // the URL of the Web Server
-const String _urlBase = "http://192.168.1.41:5000";
+const String _urlBase = "http://192.168.1.36:5000/";
 
 // the URI to the Web Server Web API
 const String _serverApi = "/";
@@ -106,8 +106,6 @@ Future<String> handShake() async {
         // and proceed with another handshake
         await _setMobileToken("");
         break;
-
-      //TODO: add other cases
     }
 
     return _status;
@@ -160,7 +158,6 @@ Future<Map> postRequest(String serviceName, Map<String, dynamic> data) async {
       // if (responseBody["status"] == "TOKEN") {
       //   await _setMobileToken(responseBody["data"]);
 
-      //   // TODO: rerun the Post request
       // }
     }
   } catch (e) {
