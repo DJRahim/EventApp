@@ -43,7 +43,6 @@ class ConnectPageState extends State<ConnectPage> {
           'auth/se_connecter?email=${c['email']}&password=${c['password']}', c);
 
       var b = jsonDecode(a);
-      print(c);
 
       print(b);
 
@@ -68,18 +67,61 @@ class ConnectPageState extends State<ConnectPage> {
               break;
           }
 
+          var termstr = "";
+          switch (us['domaine']) {
+            case "Sante":
+              termstr = "1";
+              break;
+            case "Culture":
+              termstr = "2";
+              break;
+            case "Education":
+              termstr = "3";
+              break;
+            case "Ingenerie":
+              termstr = "4";
+              break;
+            case "Finance":
+              termstr = "5";
+              break;
+            case "Administration":
+              termstr = "6";
+              break;
+            case "Construction":
+              termstr = "7";
+              break;
+            case "Droit":
+              termstr = "8";
+              break;
+            case "Sport":
+              termstr = "9";
+              break;
+            case "Commerce":
+              termstr = "10";
+              break;
+            case "Recherche":
+              termstr = "11";
+              break;
+            case "Tourisme":
+              termstr = "12";
+              break;
+          }
+
           var profil = us['age'] +
               "," +
               us['sexe'] +
               "," +
-              us['chois'] +
+              prefs.getString('choixUser2') +
               "," +
               us['domaine'] +
               ",";
 
+          var exp = prefs.getString('choixUser');
+          exp = exp.substring(1);
+
           if (!prefs.getBool("upload")) {
             await auth.getRequest(
-                "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&id_phone=${prefs.getString('registerId')}&chois=[${us['chois']}]&age=${us['age']}&profesion=${us['domaine']}&sex=$sexe&latitude=${us['latitude']}&longitude=${us['longitude']}&profil=$profil",
+                "profil/upload?type=2&token=${b['token']}&nom=${us['nom']}&id_phone=${prefs.getString('registerId')}&chois=[$exp]&age=${us['age']}&profesion=$termstr&sex=$sexe&latitude=${us['latitude']}&longitude=${us['longitude']}&profil=$profil",
                 {});
 
             prefs.setBool("upload", true);
@@ -92,11 +134,11 @@ class ConnectPageState extends State<ConnectPage> {
             var user = await DBProvider.db.getAllPubli();
             var us = user[0].toMap();
 
-            // print(us);
-
             await auth.getRequest(
                 "profil/upload?type=1&token=${b['token']}&nom=${us['nom']}&id_phone=${prefs.getString('registerId')}&nom_organis=${us['organisme']}",
                 {});
+
+            prefs.setBool("upload", true);
           }
 
           break;
@@ -155,71 +197,69 @@ class ConnectPageState extends State<ConnectPage> {
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    FormBuilder(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(height: 260),
-                          FormBuilderTextField(
-                            attribute: "email",
-                            decoration: theme("email"),
-                            validators: [
-                              FormBuilderValidators.email(
-                                  errorText: "e-mail non valide"),
-                              FormBuilderValidators.required(
-                                  errorText: "Ce champs est obligatoire!")
-                            ],
-                          ),
-                          SizedBox(height: 20.0),
-                          FormBuilderTextField(
-                            attribute: "password",
-                            decoration: theme("password"),
-                            obscureText: true,
-                            maxLines: 1,
-                            validators: [
-                              FormBuilderValidators.minLength(6,
-                                  errorText:
-                                      "mot de passe doit etre > a 6 caracteres"),
-                              FormBuilderValidators.required(
-                                  errorText: "Ce champs est obligatoire!")
-                            ],
-                          ),
-                          SizedBox(height: 30.0),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                  child: button(context, "Valider",
-                                      () => _confirm(context))),
-                              SizedBox(width: 20),
-                              Expanded(
-                                  child: button(context, "Effacer", _reset))
-                            ],
-                          ),
-                          SizedBox(height: 50.0),
-                          Container(
-                            child: InkWell(
-                              child: Text(
-                                "Vous pouvez s'inscrire si vous n'avez pas un compte",
-                                style: TextStyle(
-                                  color: Colors.blue[600],
-                                  fontSize: 16,
-                                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  FormBuilder(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(height: 260),
+                        FormBuilderTextField(
+                          attribute: "email",
+                          decoration: theme("email"),
+                          validators: [
+                            FormBuilderValidators.email(
+                                errorText: "e-mail non valide"),
+                            FormBuilderValidators.required(
+                                errorText: "Ce champs est obligatoire!")
+                          ],
+                        ),
+                        SizedBox(height: 20.0),
+                        FormBuilderTextField(
+                          attribute: "password",
+                          decoration: theme("password"),
+                          obscureText: true,
+                          maxLines: 1,
+                          validators: [
+                            FormBuilderValidators.minLength(6,
+                                errorText:
+                                    "mot de passe doit etre > a 6 caracteres"),
+                            FormBuilderValidators.required(
+                                errorText: "Ce champs est obligatoire!")
+                          ],
+                        ),
+                        SizedBox(height: 30.0),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                                child: button(context, "Valider",
+                                    () => _confirm(context))),
+                            SizedBox(width: 20),
+                            Expanded(child: button(context, "Effacer", _reset))
+                          ],
+                        ),
+                        SizedBox(height: 50.0),
+                        Container(
+                          height: 50,
+                          child: InkWell(
+                            child: Text(
+                              "Vous pouvez s'inscrire si vous n'avez pas un compte",
+                              style: TextStyle(
+                                color: Colors.blue[600],
+                                fontSize: 16,
                               ),
-                              onTap: inscrire,
                             ),
-                          )
-                        ],
-                      ),
+                            onTap: inscrire,
+                          ),
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

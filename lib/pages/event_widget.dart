@@ -38,7 +38,7 @@ class EventWidgetState extends State<EventWidget> {
     m.add(Marker(
         markerId: MarkerId("mark"),
         draggable: false,
-        position: LatLng(e.pos.latitude, e.pos.longitude)));
+        position: LatLng(0.0, 0.0) ?? LatLng(e.pos.latitude, e.pos.longitude)));
     return Scaffold(
         body: Padding(
       padding: EdgeInsets.all(10.0),
@@ -67,33 +67,76 @@ class EventWidgetState extends State<EventWidget> {
         var a = await auth.getRequest('auth/', {});
 
         var c = jsonDecode(a);
+
+        print(c);
         break;
       case 2:
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Confirmer votre participation"),
-                actions: <Widget>[
-                  FlatButton(
-                      child: Text('Confirmer'),
-                      onPressed: () async {
-                        var a = await auth.getRequest(
-                            'profil/je_participe?token=${prefs.getString('token')}&id_evenement=${e.idEvent}',
-                            {});
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Confirmer votre participation"),
+                  actions: <Widget>[
+                    FlatButton(
+                        child: Text('Confirmer'),
+                        onPressed: () async {
+                          var a = await auth.getRequest(
+                              'profil/je_participe?token=${prefs.getString('token')}&id_evenement=${e.idEvent}',
+                              {});
 
-                        var c = jsonDecode(a);
+                          var c = jsonDecode(a);
 
-                        Scaffold.of(context).showSnackBar(snackBar(
-                            'Inscription reussi! \nVeuillez valider votre email.',
-                            Colors.green));
+                          print(c);
 
-                        await Future.delayed(const Duration(seconds: 4), () {});
-                      }),
-                  FlatButton(child: Text('Annuler'), onPressed: () {})
-                ],
-              );
-            });
+                          Navigator.pop(context);
+                        }),
+                    FlatButton(
+                        child: Text('Annuler'),
+                        onPressed: () {
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        })
+                  ],
+                );
+              });
+        });
+
+        break;
+      case 0:
+        switch (e.source) {
+          case "kherdja_1":
+            var a = await auth.getRequest(
+                'profil/admin/valider_evenement_khardja_1_traiter?id_evenement=${e.idEvent}&etat=2',
+                {});
+
+            var c = jsonDecode(a);
+
+            print(c);
+
+            break;
+          case "kherdja_2":
+            var a = await auth.getRequest(
+                'profil/admin/valider_evenement_khardja_2_traiter?etat=2&id_evenement=${e.idEvent}',
+                {});
+
+            var c = jsonDecode(a);
+
+            print(c);
+
+            break;
+          case "eventbrite":
+            var a = await auth.getRequest(
+                'profil/admin/valider_evenement_eventbrite_traiter?id_evenement=${e.idEvent}&etat=2',
+                {});
+
+            var c = jsonDecode(a);
+
+            print(c);
+
+            break;
+        }
 
         break;
       default:

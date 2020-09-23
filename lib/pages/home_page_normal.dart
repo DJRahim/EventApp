@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/pages/home_page.dart';
 import 'package:eventapp/pages/liste_participation.dart';
 import 'package:eventapp/tools/widgets.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uic/list_uic.dart';
@@ -33,28 +36,113 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
   Color c1 = Colors.grey[300];
   Color c2 = Colors.white;
 
-  initlist(int a) async {
-    // API
+  final FirebaseMessaging _fcm = new FirebaseMessaging();
+  SharedPreferences prefs;
+
+  void firebaseCloudMessagingListeners() async {
+    prefs = await SharedPreferences.getInstance();
+
+    if (Platform.isIOS) iOSPermission();
+
+    _fcm.getToken().then((token) {
+      print(token);
+      prefs.setString('registerId', token);
+    });
+
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> msg) async {
+        print('on message $msg');
+        var message = msg['notification'];
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: ListTile(
+                    title: Text(message['title']),
+                    subtitle: Text(message['body']),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                        child: Text('Visualiser'),
+                        onPressed: () async {
+                          var id1 = msg['data'];
+                          var id = id1['event'];
+
+                          var a = await auth.getRequest(
+                              'profil/evenement?id_evenment=$id', {});
+                          var b = jsonDecode(a);
+
+                          var event = Event.fromJson(b);
+
+                          Navigator.pushNamed(context, '/event',
+                              arguments: [event, "Participer"]);
+                          Navigator.pop(context);
+                        }),
+                    FlatButton(
+                        child: Text('Annuler'),
+                        onPressed: () {
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        })
+                  ],
+                );
+              });
+        });
+      },
+      onResume: (Map<String, dynamic> msg) async {
+        print('on resume $msg');
+
+        setState(() async {
+          var id1 = msg['data'];
+          var id = id1['event'];
+
+          var a = await auth.getRequest('profil/evenement?id_evenment=$id', {});
+          var b = jsonDecode(a);
+
+          print(b);
+
+          var event = Event.fromJson(b);
+
+          Navigator.pushNamed(context, '/event',
+              arguments: [event, "Participer"]);
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
+  }
+
+  void iOSPermission() {
+    _fcm.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _fcm.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+  }
+
+  initlist(int b) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var a;
 
-    switch (a) {
+    switch (b) {
       case 1:
-        a = await auth.getRequest('affichage_public', {});
+        var x = prefs.getString('token');
 
+        a = await auth.getRequest('profil/ma_liste?token=$x', {});
         break;
       case 2:
         a = await auth.getRequest('autre', {});
-
         break;
     }
-    var eventsJson = jsonDecode(a) as List;
-    List<Event> events =
-        eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
 
-    print(events);
+    var eventsMap = jsonDecode(a) as Map<String, dynamic>;
+    var list = eventsMap.entries.map((e) => Event.fromJson(e.value)).toList();
 
-    listevent = events;
+    listevent = list;
   }
 
   Future<List<Event>> _getItems(int page) async {
@@ -70,17 +158,25 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
 
   @override
   void initState() {
+    // Instancier les types et sous-types
+    initTypeSousType();
+
+    initlist(1);
+
     uic = ListUicController<Event>(
       onGetItems: (int page) => _getItems(page),
     );
-    initlist(1);
+
     super.initState();
+
+    firebaseCloudMessagingListeners();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: drawer(context, listWidget: [
+        SizedBox(height: 30),
         ListTile(
           title: Text("Se deconnecter"),
           onTap: () {
@@ -125,9 +221,10 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
                       child: Container(
                         color: c1,
                         child: Center(
-                          child: Text(
+                          child: AutoSizeText(
                             "Evenement de l'application",
                             style: TextStyle(fontSize: 17),
+                            maxLines: 2,
                           ),
                         ),
                       ),
@@ -149,7 +246,7 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
                       child: Container(
                         color: c2,
                         child: Center(
-                          child: Text(
+                          child: AutoSizeText(
                             "Autres",
                             style: TextStyle(fontSize: 17),
                           ),
@@ -174,7 +271,7 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
               height: 2,
             ),
             Container(
-                height: MediaQuery.of(context).size.height * 0.88,
+                height: MediaQuery.of(context).size.height * 0.86,
                 child: listEvent(uic, context, "Participer")),
             SizedBox(height: 7),
           ],
@@ -187,8 +284,9 @@ class MyHomePageNormalState extends State<MyHomePageNormal> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     showAlertDialog(
-        cont, "Deconnexion", "Etes-vous sur de vouloir se deconnecter?", () {},
-        () {
+        cont, "Deconnexion", "Etes-vous sur de vouloir se deconnecter?", () {
+      Navigator.pop(context);
+    }, () {
       prefs.clear();
       prefs.setInt('type', -1);
 

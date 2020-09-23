@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uic/list_uic.dart';
-import 'package:intl/intl.dart';
 import 'package:eventapp/tools/auth.dart' as auth;
 
 // Ceci est la page de recherche
@@ -34,6 +33,57 @@ class SearchPageState extends State<SearchPage> {
   List listType = List<String>();
   List listSousType = List<String>();
 
+  List wilaya = [
+    "Adrar",
+    "Chlef",
+    "Laghouat",
+    "Oum El Bouaghi",
+    "Batna",
+    "Béjaïa",
+    "Biskra",
+    "Béchar",
+    "Blida",
+    "Bouira",
+    "Tamanrasset",
+    "Tébessa",
+    "Tlemcen",
+    "Tiaret",
+    "Tizi Ouzou",
+    "Alger",
+    "Djelfa",
+    "Jijel",
+    "Sétif",
+    "Saïda",
+    "Skikda",
+    "Sidi Bel Abbès",
+    "Annaba",
+    "Guelma",
+    "Constantine",
+    "Médéa",
+    "Mostaganem",
+    "M'Sila",
+    "Mascara",
+    "Ouargla",
+    "Oran",
+    "El Bayadh",
+    "Illizi",
+    "Bordj Bou Arreridj",
+    "Boumerdès",
+    "El Tarf",
+    "Tindouf",
+    "Tissemsilt",
+    "El Oued",
+    "Khenchela",
+    "Souk Ahras",
+    "Tipaza",
+    "Mila",
+    "Aïn Defla",
+    "Naâma",
+    "Aïn Témouchent",
+    "Ghardaïa",
+    "Relizane"
+  ];
+
   List<Event> listevent = List<Event>();
 
   Future<List<Event>> _getItems(int page) async {
@@ -53,27 +103,31 @@ class SearchPageState extends State<SearchPage> {
       a.addAll(_formKey.currentState.value);
 
       var x = await auth.getRequest(
-          'recherche?type=${a['type']}&soustype=${a['sous_type']}&next=${a['next']}',
+          'recherche?type=${a['type']}&soustype=${a['sous_type']}&next=${a['date']}&state=${a['state']}',
           {});
 
-      var eventsJson = jsonDecode(x) as List;
-      List<Event> events =
-          eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
+      var eventsMap = jsonDecode(x) as Map<String, dynamic>;
+      var list = eventsMap.entries.map((e) => Event.fromJson(e.value)).toList();
 
-      print(events);
+      listevent = list;
 
-      listevent = events;
+      print(a);
+      initList();
+    }
+  }
 
+  initList() {
+    setState(() {
       uic = ListUicController<Event>(
         onGetItems: (int page) => _getItems(page),
       );
-      print(a);
-    }
+    });
   }
 
   @override
   void initState() {
     _initType();
+
     super.initState();
   }
 
@@ -174,6 +228,16 @@ class SearchPageState extends State<SearchPage> {
                                 ),
                               ),
                               SizedBox(height: 10),
+                              FormBuilderDropdown(
+                                attribute: "state",
+                                decoration: theme("Lieu de deroulement"),
+                                hint: Text('Selectionner une wilaya'),
+                                items: wilaya
+                                    .map((lieu) => DropdownMenuItem(
+                                        value: lieu, child: Text("$lieu")))
+                                    .toList(),
+                              ),
+                              SizedBox(height: 15),
                               FormBuilderChoiceChip(
                                 attribute: "date",
                                 decoration: theme("Date de deroulement"),
@@ -238,7 +302,7 @@ class SearchPageState extends State<SearchPage> {
     setState(() {
       if (type != "Theatre") {
         listSousType = prefs.getStringList(type);
-        _visible = true;
+        // _visible = true;
       }
     });
   }

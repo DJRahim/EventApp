@@ -17,7 +17,7 @@ const String _applicationId = "my_application_id";
 const String _storageKeyMobileToken = "token";
 
 // the URL of the Web Server
-const String _urlBase = "http://192.168.1.36:5000/";
+const String _urlBase = "http://192.168.1.39:5000/";
 
 // the URI to the Web Server Web API
 const String _serverApi = "/";

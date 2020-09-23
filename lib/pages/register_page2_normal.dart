@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:eventapp/classes/profession.dart';
 import 'package:eventapp/classes/user_normal.dart';
 import 'package:eventapp/tools/database.dart';
@@ -51,14 +52,14 @@ class _RegisterPage2State extends State<RegisterPage2> {
 
   @override
   void initState() {
-    _initType();
-    Geoloc.requestLocationPermission();
-    Geoloc.gpsService(context);
     super.initState();
+    _initType();
+    local();
   }
 
   @override
   void dispose() {
+    initTypeSousType();
     super.dispose();
     _formKey.currentState.dispose();
   }
@@ -106,10 +107,10 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text("Etape 1"),
+                              SizedBox(child: AutoSizeText("Etape 1")),
                               SizedBox(height: 15.0),
                               FormBuilderTextField(
-                                attribute: "username",
+                                attribute: "nom",
                                 decoration: theme("Nom d'utilisateur"),
                                 validators: [
                                   FormBuilderValidators.required(
@@ -123,7 +124,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                                 spacing: 3.0,
                                 options: [
                                   FormBuilderFieldOption(
-                                    value: "0-17",
+                                    value: "-17",
                                     child: Text("moins de 17 ans"),
                                   ),
                                   FormBuilderFieldOption(
@@ -188,14 +189,13 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text("Etape 2"),
+                              SizedBox(child: AutoSizeText("Etape 2")),
                               SizedBox(height: 15),
                               Text("Selectionner 3 themes culturels"),
                               SizedBox(height: 15),
                               FormBuilderDropdown(
                                 attribute: "type1",
                                 decoration: theme("Theme culturel"),
-                                // liste type
                                 items: listType
                                     .map((gender) => DropdownMenuItem(
                                         value: gender, child: Text("$gender")))
@@ -360,7 +360,6 @@ class _RegisterPage2State extends State<RegisterPage2> {
             if (_formKey.currentState.saveAndValidate()) {
               a.addAll(_formKey.currentState.value);
               print(a);
-              local();
               suivant = "Valider";
               _index++;
             }
@@ -391,6 +390,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
     var c = {};
     c.addAll(a);
     c.addAll(b);
+    local();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("upload", false);
@@ -398,17 +398,22 @@ class _RegisterPage2State extends State<RegisterPage2> {
     double latitude = locationData.latitude;
     double longitude = locationData.longitude;
 
-    var choix = c['type1'] + "," + c['type2'] + "," + c['type3'] + ",";
+    var choix = c['type1'] + "," + c['type2'] + "," + c['type3'];
+    var choix2 = "";
 
-    for (var item in c['sous_type1']) {
-      choix = choix + item + ",";
+    for (var item in c['sous-type1']) {
+      choix2 = choix2 + "," + item;
     }
-    for (var item in c['sous_type2']) {
-      choix = choix + item + ",";
+    for (var item in c['sous-type2']) {
+      choix2 = choix2 + "," + item;
     }
-    for (var item in c['sous_type3']) {
-      choix = choix + item + ",";
+    for (var item in c['sous-type3']) {
+      choix2 = choix2 + "," + item;
     }
+
+    choix = choix + choix2;
+
+    DBProvider.db.deleteAll();
 
     DBProvider.db.newUser(Normal.fromMap({
       'nom': c['nom'],
@@ -418,8 +423,11 @@ class _RegisterPage2State extends State<RegisterPage2> {
       'domaine': c['profession'],
       'latitude': latitude,
       'longitude': longitude,
-      'chois': choix
+      'chois': choix.toString()
     }));
+
+    prefs.setString("choixUser", choix2);
+    prefs.setString("choixUser2", choix);
 
     Scaffold.of(cont).showSnackBar(snackBar(
         'Inscription reussi! \nVeuillez valider votre email.', Colors.green));

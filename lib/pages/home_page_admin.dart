@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:eventapp/pages/liste_events_admin.dart';
 import 'package:eventapp/pages/liste_publieur_admin.dart';
 import 'package:eventapp/tools/widgets.dart';
@@ -56,7 +57,7 @@ class MyHomePageAdminState extends State<MyHomePageAdmin> {
                   elevation: 3,
                   child: InkWell(
                     child: Center(
-                      child: Text(
+                      child: AutoSizeText(
                         "Liste des evenements a valider",
                         style: TextStyle(
                           color: Colors.black,
@@ -80,7 +81,7 @@ class MyHomePageAdminState extends State<MyHomePageAdmin> {
                   elevation: 3,
                   child: InkWell(
                     child: Center(
-                      child: Text(
+                      child: AutoSizeText(
                         "Liste des publieurs a valider",
                         style: TextStyle(
                           color: Colors.black,

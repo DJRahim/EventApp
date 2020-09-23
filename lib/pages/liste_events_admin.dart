@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:eventapp/tools/database.dart';
 import 'package:uic/list_uic.dart';
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/tools/widgets.dart';

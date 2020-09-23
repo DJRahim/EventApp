@@ -7,10 +7,10 @@ class Publieur {
   Publieur(this.nom, this.email, this.organisme, this.idPub);
 
   Publieur.fromJson(Map<String, dynamic> json)
-      : idPub = json['id_publieur'],
+      : idPub = json['id_num'],
         nom = json['nom'],
         email = json['email'],
-        organisme = json['organisme'];
+        organisme = json['nom_organis'].toString();
 
   Map<String, dynamic> toJson() =>
       {'nom': nom, 'email': email, 'organisme': organisme};

@@ -1,4 +1,3 @@
-import 'package:eventapp/tools/widgets.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -21,10 +20,11 @@ class Event {
   String contactEmail;
   String contactNum;
   String contactLien;
-  String lieu = "";
+  String lieu;
+  String source;
 
   Event(
-      this.idEvent,
+      [this.idEvent,
       this.nom,
       this.description,
       this.dateDebut,
@@ -40,30 +40,36 @@ class Event {
       this.contactEmail,
       this.contactNum,
       this.contactLien,
-      this.photo) {
+      this.photo]) {
     setLieu();
   }
 
   void setLieu() async {
-    final coordinates = new Coordinates(this.pos.latitude, this.pos.longitude);
-    var list = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = list.first;
-    lieu = "${first.addressLine}";
+    if (pos == null) {
+      lieu = "!";
+    } else {
+      final coordinates =
+          new Coordinates(this.pos.latitude, this.pos.longitude);
+      var list = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      var first = list.first;
+      lieu = "${first.addressLine}";
+    }
   }
 
   Event.fromJson(Map<String, dynamic> json)
       : idEvent = json['id_evenment'],
         nom = json['Nom_Organisateur'],
         description = json['descritpion'],
-        dateDebut = json['Date_debut'],
-        dateFin = json['Date_fin'],
+        dateDebut = "0000-00-00 00:00:00" ?? json['Date_debut'],
+        dateFin = "0000-00-00 00:00:00" ?? json['Date_fin'],
         nbPlaceDispo = json['Nombre_de_place_disponible'].toString(),
-        prix = json['Prix'],
-        type = idTypeToNom(json['id_type']),
-        contactEmail = json['contact_email'],
-        contactNum = json['contact_num'],
-        contactLien = json['contact_lien'],
-        photo = json['Photo'],
+        prix = "!" ?? json['Prix'],
+        type = json['id_type'],
+        contactEmail = "!" ?? json['contact_email'],
+        contactNum = "!" ?? json['contact_num'].toString(),
+        contactLien = "!" ?? json['contact_lien'],
+        photo = "!" ?? json['Photo'],
+        source = json['source'],
         pos =
             Position(latitude: json['latitude'], longitude: json['longitude']);
 

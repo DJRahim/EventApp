@@ -48,7 +48,6 @@ class RegisterPageState extends State<RegisterPage> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('email', c['email']);
         await prefs.setString('password', c['password']);
-        // await prefs.setString('type', c['type']);
 
         if (c['type'] == '1') {
           Navigator.pushNamed(context, '/inscription3');
@@ -71,6 +70,14 @@ class RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Builder(builder: (cont) {
       return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Inscription",
+            style: Theme.of(context).textTheme.headline1,
+            textAlign: TextAlign.center,
+          ),
+          iconTheme: new IconThemeData(color: Colors.blueGrey[800]),
+        ),
         body: Padding(
           padding: EdgeInsets.all(0),
           child: SingleChildScrollView(

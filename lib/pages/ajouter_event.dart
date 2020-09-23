@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:eventapp/tools/auth.dart' as auth;
 import 'package:eventapp/classes/event.dart';
-import 'package:eventapp/tools/database.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -139,7 +139,7 @@ class AjouterEventState extends State<AjouterEvent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text("Etape 1"),
+                        SizedBox(child: AutoSizeText("Etape 1")),
                         SizedBox(height: 15),
                         FormBuilderTextField(
                           attribute: "nom",
@@ -220,7 +220,7 @@ class AjouterEventState extends State<AjouterEvent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text("Etape 2"),
+                        SizedBox(child: AutoSizeText("Etape 2")),
                         SizedBox(height: 15),
                         FormBuilderTextField(
                           keyboardType: TextInputType.number,
@@ -258,8 +258,8 @@ class AjouterEventState extends State<AjouterEvent> {
                           hint: Text('Selectionner un theme'),
                           // liste type
                           items: listType
-                              .map((gender) => DropdownMenuItem(
-                                  value: gender, child: Text("$gender")))
+                              .map((type) => DropdownMenuItem(
+                                  value: type, child: Text("$type")))
                               .toList(),
                           onChanged: (value) {
                             setSousType(value);
@@ -277,8 +277,8 @@ class AjouterEventState extends State<AjouterEvent> {
                             decoration: theme("Sous-theme de l'evenement"),
                             hint: Text('Selectionner un sous-theme'),
                             items: listSousType
-                                .map((gender) => DropdownMenuItem(
-                                    value: gender, child: Text("$gender")))
+                                .map((type) => DropdownMenuItem(
+                                    value: type, child: Text("$type")))
                                 .toList(),
                             validators: [
                               FormBuilderValidators.required(
@@ -300,7 +300,7 @@ class AjouterEventState extends State<AjouterEvent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text("Etape 3"),
+                        SizedBox(child: AutoSizeText("Etape 3")),
                         SizedBox(height: 15),
                         FormBuilderFilterChip(
                           decoration: theme("Tranches d'age cibles"),
@@ -308,7 +308,7 @@ class AjouterEventState extends State<AjouterEvent> {
                           spacing: 3.0,
                           options: [
                             FormBuilderFieldOption(
-                              value: "0-17",
+                              value: "-17",
                               child: Text("moins de 17 ans"),
                             ),
                             FormBuilderFieldOption(
@@ -353,7 +353,7 @@ class AjouterEventState extends State<AjouterEvent> {
                         SizedBox(height: 15),
                         FormBuilderFilterChip(
                           decoration: theme("Domaines cibles"),
-                          attribute: "doamine",
+                          attribute: "domaine",
                           spacing: 3.0,
                           options: [
                             FormBuilderFieldOption(
@@ -425,7 +425,7 @@ class AjouterEventState extends State<AjouterEvent> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         //4 eme etape: Contact
-                        Text("Etape 4"),
+                        SizedBox(child: AutoSizeText("Etape 4")),
                         SizedBox(height: 15),
                         FormBuilderTextField(
                           attribute: "email",
@@ -523,6 +523,8 @@ class AjouterEventState extends State<AjouterEvent> {
 
     var ar = event.toMap();
 
+    print(ar);
+
     var profil = "";
 
     for (var term in y['age']) {
@@ -531,10 +533,10 @@ class AjouterEventState extends State<AjouterEvent> {
     for (var term in y['sexe']) {
       var termstr = "";
       switch (term) {
-        case 1:
+        case "1":
           termstr = "Homme";
           break;
-        case 2:
+        case "2":
           termstr = "Femme";
           break;
       }
@@ -547,40 +549,40 @@ class AjouterEventState extends State<AjouterEvent> {
     for (var term in y['domaine']) {
       var termstr = "";
       switch (term) {
-        case 1:
+        case "1":
           termstr = "Sante";
           break;
-        case 2:
+        case "2":
           termstr = "Culture";
           break;
-        case 3:
+        case "3":
           termstr = "Education";
           break;
-        case 4:
+        case "4":
           termstr = "Ingenerie";
           break;
-        case 5:
+        case "5":
           termstr = "Finance";
           break;
-        case 6:
+        case "6":
           termstr = "Administration";
           break;
-        case 7:
+        case "7":
           termstr = "Construction";
           break;
-        case 8:
+        case "8":
           termstr = "Droit";
           break;
-        case 9:
+        case "9":
           termstr = "Sport";
           break;
-        case 10:
+        case "10":
           termstr = "Commerce";
           break;
-        case 11:
+        case "11":
           termstr = "Recherche";
           break;
-        case 12:
+        case "12":
           termstr = "Tourisme";
           break;
       }
@@ -592,7 +594,7 @@ class AjouterEventState extends State<AjouterEvent> {
     print(prefs.getString('token'));
 
     var i = await auth.getRequest(
-        'profil/nouveau_evenement?token=${prefs.getString("token")}&Nom_Organisateur=serbess&id_type=5&Nombre_de_place_disponible=${ar['nb_place_dispo']}&Prix=500&Date_debut=${ar['datedebut']}&Date_fin=${ar['datefin']}&Photo=oasoj&latitude=${ar['latitude']}&longitude=${ar['longitude']}&descritpion=${ar['corps']}&profile=$profil',
+        'profil/nouveau_evenement?token=${prefs.getString("token")}&Nom_Organisateur=${ar['nom']}&id_type=${ar['type']}&Nombre_de_place_disponible=${ar['nbPlaceDispo']}&Prix=${ar['prix']}&Date_debut=${ar['datedebut']}&Date_fin=${ar['datefin']}&Photo=oasoj&latitude=${ar['latitude']}&longitude=${ar['longitude']}&descritpion=${ar['description']}&profil=$profil&contact_email=${ar['contactEmail']}&contact_num=${ar['contactNum']}&contact_lien=${ar['contactLien']}',
         {});
 
     var j = jsonDecode(i);

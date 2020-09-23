@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:uic/list_uic.dart';
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/tools/widgets.dart';
@@ -121,7 +122,7 @@ class MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 30,
+              height: 50,
               child: Row(
                 children: <Widget>[
                   Container(
@@ -130,9 +131,10 @@ class MyHomePageState extends State<MyHomePage> {
                       child: Container(
                         color: c1,
                         child: Center(
-                          child: Text(
+                          child: AutoSizeText(
                             "Evenement de l'application",
-                            style: TextStyle(fontSize: 17),
+                            style: TextStyle(fontSize: 13),
+                            maxLines: 2,
                           ),
                         ),
                       ),
@@ -154,9 +156,9 @@ class MyHomePageState extends State<MyHomePage> {
                       child: Container(
                         color: c2,
                         child: Center(
-                          child: Text(
+                          child: AutoSizeText(
                             "Autres",
-                            style: TextStyle(fontSize: 17),
+                            style: TextStyle(fontSize: 13),
                           ),
                         ),
                       ),
@@ -179,7 +181,7 @@ class MyHomePageState extends State<MyHomePage> {
               height: 2,
             ),
             Container(
-                height: MediaQuery.of(context).size.height * 0.83,
+                height: MediaQuery.of(context).size.height * 0.75,
                 child: listEvent(uic, context, "Participer")),
             SizedBox(height: 7),
           ],

@@ -29,7 +29,7 @@ class ListePublieurAdminState extends State<ListePublieurAdmin> {
   List<Publieur> listpublieur = List<Publieur>();
 
   initlist() async {
-    var a = await auth.getRequest('affichage_public', {});
+    var a = await auth.getRequest('profil/admin/lister_lister_publieur', {});
 
     var pubMaps = jsonDecode(a) as Map<String, dynamic>;
     var list = pubMaps.entries.map((e) => Publieur.fromJson(e.value)).toList();

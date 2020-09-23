@@ -55,6 +55,5 @@ class Normal {
         'domaine': domaine,
         'latitude': location.latitude,
         'longitude': location.longitude,
-        'chois': listeInteret
       };
 }

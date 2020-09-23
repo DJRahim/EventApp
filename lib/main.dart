@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'package:connectivity/connectivity.dart';
-import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/pages/ajouter_event.dart';
 import 'package:eventapp/pages/connect_page.dart';
 import 'package:eventapp/pages/event_widget.dart';
@@ -16,11 +13,9 @@ import 'package:eventapp/pages/register_page2_normal.dart';
 import 'package:eventapp/pages/register_page3_publieur.dart';
 import 'package:eventapp/pages/search_page.dart';
 import 'package:eventapp/tools/widgets.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:eventapp/tools/auth.dart' as auth;
 
 // Ceci est la page root de l'application (chaque fois l'application s,ouvre, ca passe par cette page)
 
@@ -40,8 +35,6 @@ class RootPageState extends State<RootPage> {
 
   StreamSubscription connectivitySubscription;
 
-  final FirebaseMessaging _fcm = new FirebaseMessaging();
-
   SharedPreferences prefs;
 
   var status;
@@ -60,145 +53,13 @@ class RootPageState extends State<RootPage> {
         MaterialPageRoute(builder: (BuildContext context) => NoConnection()));
   }
 
-  void firebaseCloudMessagingListeners() async {
-    prefs = await SharedPreferences.getInstance();
-
-    if (Platform.isIOS) iOSPermission();
-
-    _fcm.getToken().then((token) {
-      print(token);
-      prefs.setString('registerId', token);
-    });
-
-    _fcm.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-              title: Text(message['notification']['title']),
-              subtitle: Text(message['notification']['body']),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      },
-      onResume: (Map<String, dynamic> msg) async {
-        print('on resume $msg');
-        var id = msg['screen'];
-
-        var a = await auth.getRequest('serviceName/idevent=$id', {});
-        var b = jsonDecode(a);
-
-        var event = Event.fromJson(b);
-
-        Navigator.pushNamed(context, '/event', arguments: event);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
-  }
-
-  void iOSPermission() {
-    _fcm.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _fcm.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
-  }
-
   initStatus() async {
     prefs = await SharedPreferences.getInstance();
 
-    // Tester notification
-
-    // var a = await auth.getRequest(
-    //     'notify/?id_phone=${prefs.getString("registerId")}&titre=titre&message=jdnoiendoe',
-    //     {});
-
-    // print(jsonDecode(a));
-
     // La liste des types et des sous-types
 
-    prefs.setStringList("Type", [
-      "Music",
-      "Cinema",
-      "Loisirs",
-      "Theatre",
-      "Arts",
-      "Sport",
-      "Sante",
-      "Voyage",
-      "Fetes",
-      "Bienfaisance",
-      "Religion",
-    ]);
-
-    prefs.setStringList(
-        "Music", ["Rai", "Chaabi", "Traditionnel", "Rap", "Rock", "Jazz"]);
-
-    prefs.setStringList("Cinema", [
-      "Horreur",
-      "Comedie",
-      "Science-Fiction",
-      "Action",
-      "Aventure",
-      "Crime",
-      "Documentaire",
-      "Animation",
-      "Guerre",
-      "Romance",
-      "Mystere",
-      "Drama",
-      "Sport",
-      "Super-Heros",
-      "Historique"
-    ]);
-
-    prefs.setStringList("Loisirs",
-        ["Jeux", "Cirque", "Photographie", "dessin", "Peinture", "Lecture"]);
-
-    prefs.setStringList("Arts",
-        ["Dance", "Beaux-Arts", "Art-litteraire", "Artisanat", "Opera"]);
-
-    prefs.setStringList("Sport", [
-      "Football",
-      "Basketball",
-      "Handball",
-      "Volleyball",
-      "Natation",
-      "Automobile",
-      "Arts-martiaux"
-    ]);
-
-    prefs.setStringList(
-        "Sante", ["Ftness", "Sante-mentale", "Yoga", "Medecine-naturelle"]);
-
-    prefs.setStringList(
-        "Voyage", ["Escalade", "Voyages", "Visite", "Randonnee", "Camping"]);
-
-    prefs.setStringList("Fetes", [
-      "nationale",
-      "religieuse",
-      "Journee-nationale",
-      "Journee-mondiale",
-      "Activite-saisonniere"
-    ]);
-
-    prefs.setStringList("Bienfaisance",
-        ["Environnement", "Droit-humain", "animal", "Pauverete", "Nettoyage"]);
-
-    prefs.setStringList(
-        "Religion", ["concours", "cercle", "conference", "charite"]);
-
     setState(() {
+      prefs.setInt('type', 0);
       status = prefs.getInt('type');
 
       switch (status) {
@@ -222,8 +83,11 @@ class RootPageState extends State<RootPage> {
     // on utilise le status pour choisir la home page adequat
     initStatus();
 
+    // Instancier les types et sous-types
+    initTypeSousType();
+
     // Ca c'est pour gerer les notifications (c'est en commentaire pour tester d'autres fonctionnalites)
-    firebaseCloudMessagingListeners();
+    // firebaseCloudMessagingListeners();
 
     // Ca c'est pour gerer la connectivite (s'il y a l'internet ou non)
     // S'il y a de l'internet ca passe au home page
@@ -324,15 +188,19 @@ class RootPageState extends State<RootPage> {
 
         textTheme: TextTheme(
           headline1: TextStyle(
-              fontSize: 20.0,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey[800]),
+          headline2: TextStyle(
+              fontSize: 13.0,
               fontWeight: FontWeight.bold,
               color: Colors.blueGrey[800]),
           headline6: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w400,
+              fontSize: 12.0,
+              fontWeight: FontWeight.w600,
               color: Colors.blueGrey[800]),
           bodyText2: TextStyle(
-              fontSize: 14.0,
+              fontSize: 12.0,
               fontWeight: FontWeight.w100,
               color: Colors.blueGrey[800]),
         ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:eventapp/classes/event.dart';
 import 'package:eventapp/pages/home_page.dart';
+import 'package:eventapp/tools/database.dart';
 import 'package:eventapp/tools/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,21 +30,25 @@ class MyHomePagePublieur extends StatefulWidget {
 
 class MyHomePagePublieurState extends State<MyHomePagePublieur> {
   ListUicController<Event> uic;
+  SharedPreferences prefs;
 
   List<Event> listevent = List<Event>();
 
   initlist() async {
-    // API
+    prefs = await SharedPreferences.getInstance();
 
-    var a = await auth.getRequest('affichage_public', {});
+    var x = prefs.getString('token');
 
-    var eventsJson = jsonDecode(a) as List;
-    List<Event> events =
-        eventsJson.map((tagJson) => Event.fromJson(tagJson)).toList();
+    var a = await auth.getRequest('/profil/ma_liste_publieur?token=$x', {});
 
-    print(events);
+    var eventsMap = jsonDecode(a) as Map<String, dynamic>;
+    var list = eventsMap.entries.map((e) => Event.fromJson(e.value)).toList();
 
-    listevent = events;
+    listevent = list;
+
+    for (var item in list) {
+      DBProvider.db.newEvent(item);
+    }
   }
 
   Future<List<Event>> _getItems(int page) async {
@@ -61,6 +66,8 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
   @override
   void initState() {
     super.initState();
+    // Instancier les types et sous-types
+    initTypeSousType();
     initlist();
     uic = ListUicController<Event>(
       onGetItems: (int page) => _getItems(page),
@@ -71,9 +78,10 @@ class MyHomePagePublieurState extends State<MyHomePagePublieur> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: drawer(context, listWidget: [
+        SizedBox(height: 30),
         ListTile(
           title: Text("Se deconnecter"),
-          onTap: () {
+          onTap: () async {
             logout(context);
             Navigator.pop(context);
           },

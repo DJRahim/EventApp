@@ -32,7 +32,7 @@ class _RegisterPage3State extends State<RegisterPage3> {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      DBProvider.db.deleteAllPublieur();
+      DBProvider.db.deleteAll();
 
       DBProvider.db.newPublieur(Publieur.fromMap({
         'nom': c['nom'],

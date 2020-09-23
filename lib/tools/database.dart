@@ -33,8 +33,7 @@ class DBProvider {
           "sexe TEXT,"
           "domaine TEXT,"
           "latitude REAL,"
-          "longitude REAL,"
-          "chois TEXT"
+          "longitude REAL"
           ")");
       await db.execute("CREATE TABLE Publieur ("
           "nom TEXT,"
@@ -99,7 +98,7 @@ class DBProvider {
     List<Event> list = res.isNotEmpty
         ? res.map((c) {
             var event = Event.fromMap(c);
-            event.setLieu();
+            // event.setLieu();
             return event;
           }).toList()
         : [];
@@ -146,13 +145,10 @@ class DBProvider {
         .delete("Event", where: "nom != ?", whereArgs: ['Camping a Bouchaoui']);
   }
 
-  deleteAllPublieur() async {
-    final db = await database;
-    db.rawDelete("Delete from Publieur");
-  }
-
   deleteAll() async {
     final db = await database;
     db.rawDelete("Delete from Event");
+    db.rawDelete("Delete from Publieur");
+    db.rawDelete("Delete from User");
   }
 }
