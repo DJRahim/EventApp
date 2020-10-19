@@ -43,6 +43,8 @@ dependencies:
   firebase_core: ^0.4.5
   firebase_analytics: any
   firebase_messaging: ^6.0.16
+  flutter_form_builder: ^3.14.0
+  auto_size_text: ^2.1.0
 
 
 
@@ -51,9 +53,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   
-dependency_overrides:
-    flutter_chips_input: ^1.8.3
-    flutter_form_builder: ^3.12.3
+  
 
 
 

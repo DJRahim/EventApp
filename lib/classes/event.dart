@@ -58,20 +58,21 @@ class Event {
 
   Event.fromJson(Map<String, dynamic> json)
       : idEvent = json['id_evenment'],
-        nom = json['Nom_Organisateur'],
-        description = json['descritpion'],
-        dateDebut = "0000-00-00 00:00:00" ?? json['Date_debut'],
-        dateFin = "0000-00-00 00:00:00" ?? json['Date_fin'],
-        nbPlaceDispo = json['Nombre_de_place_disponible'].toString(),
-        prix = "!" ?? json['Prix'],
-        type = json['id_type'],
-        contactEmail = "!" ?? json['contact_email'],
-        contactNum = "!" ?? json['contact_num'].toString(),
-        contactLien = "!" ?? json['contact_lien'],
-        photo = "!" ?? json['Photo'],
-        source = json['source'],
-        pos =
-            Position(latitude: json['latitude'], longitude: json['longitude']);
+        nom = json['Nom_Organisateur'] ?? "!!",
+        description = json['descritpion'] ?? "!!",
+        dateDebut = json['Date_debut'] ?? "!!",
+        dateFin = json['Date_fin'] ?? "!!",
+        nbPlaceDispo = json['Nombre_de_place_disponible'].toString() ?? "!!",
+        prix = json['Prix'] ?? "!!",
+        type = json['id_type'] ?? "!!",
+        contactEmail = json['contact_email'] ?? "!!",
+        contactNum = json['contact_num'].toString() ?? "!!",
+        contactLien = json['contact_lien'] ?? "!!",
+        photo = json['Photo'] ?? "!!",
+        source = json['source'] ?? "!!",
+        pos = Position(
+            latitude: json['latitude'] ?? 0.0,
+            longitude: json['longitude'] ?? 0.0);
 
   Map<String, dynamic> toJson() => {
         'nom': nom,
@@ -94,25 +95,28 @@ class Event {
       };
 
   Event.fromMap(Map<String, dynamic> json)
-      : nom = json['nom'],
-        description = json['description'],
-        dateDebut = new DateFormat('yyyy-MM-dd hh:mm:ss')
-            .format(DateTime.parse(json['datedebut'])),
-        dateFin = new DateFormat('yyyy-MM-dd hh:mm:ss')
-            .format(DateTime.parse(json['datefin'])),
-        nbPlaceDispo = json['nbPlaceDispo'],
-        prix = json['prix'],
-        type = json['type'],
-        sousType = json['sousType'],
-        age = json['age'],
-        sexe = json['sexe'],
-        domaine = json['domaine'],
-        contactEmail = json['contactEmail'],
-        contactNum = json['contactNum'],
-        contactLien = json['contactLien'],
-        photo = json['photo'],
-        pos =
-            Position(latitude: json['latitude'], longitude: json['longitude']);
+      : nom = json['nom'] ?? "!!",
+        description = json['description'] ?? "!!",
+        dateDebut = new DateFormat('dd-MM-yyyy hh:mm:ss')
+                .format(DateTime.parse(json['datedebut'])) ??
+            "!!",
+        dateFin = new DateFormat('dd-MM-yyyy hh:mm:ss')
+                .format(DateTime.parse(json['datefin'])) ??
+            "!!",
+        nbPlaceDispo = json['nbPlaceDispo'] ?? "!!",
+        prix = json['prix'] ?? "!!",
+        type = json['type'] ?? "!!",
+        sousType = json['sousType'] ?? "!!",
+        age = json['age'] ?? "!!",
+        sexe = json['sexe'] ?? "!!",
+        domaine = json['domaine'] ?? "!!",
+        contactEmail = json['contactEmail'] ?? "!!",
+        contactNum = json['contactNum'] ?? "!!",
+        contactLien = json['contactLien'] ?? "!!",
+        photo = json['photo'] ?? "!!",
+        pos = Position(
+            latitude: json['latitude'] ?? 0.0,
+            longitude: json['longitude'] ?? 0.0);
 
   Map<String, dynamic> toMap() => {
         'nom': nom.toString(),

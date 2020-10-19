@@ -28,10 +28,8 @@ class SearchPageState extends State<SearchPage> {
 
   bool _filterstate = true;
   bool _liststate = false;
-  bool _visible = false;
   SharedPreferences prefs;
   List listType = List<String>();
-  List listSousType = List<String>();
 
   List wilaya = [
     "Adrar",
@@ -209,23 +207,6 @@ class SearchPageState extends State<SearchPage> {
                                     .map((type) => DropdownMenuItem(
                                         value: type, child: Text("$type")))
                                     .toList(),
-                                onChanged: (value) {
-                                  setSousType(value);
-                                },
-                              ),
-                              SizedBox(height: 15),
-                              Visibility(
-                                visible: _visible,
-                                child: FormBuilderDropdown(
-                                  attribute: "sous_type",
-                                  decoration:
-                                      theme("Sous-theme de l'evenement"),
-                                  hint: Text('Selectionner un sous-theme'),
-                                  items: listSousType
-                                      .map((type) => DropdownMenuItem(
-                                          value: type, child: Text("$type")))
-                                      .toList(),
-                                ),
                               ),
                               SizedBox(height: 10),
                               FormBuilderDropdown(
@@ -295,15 +276,5 @@ class SearchPageState extends State<SearchPage> {
     prefs = await SharedPreferences.getInstance();
 
     listType = prefs.getStringList("Type");
-  }
-
-  setSousType(String type) async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      if (type != "Theatre") {
-        listSousType = prefs.getStringList(type);
-        // _visible = true;
-      }
-    });
   }
 }

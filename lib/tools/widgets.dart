@@ -60,23 +60,19 @@ TextFormField textField(String s1, String s2, TextEditingController a) {
 
 Widget map(double lat, double long, BuildContext context, List<Marker> m,
     void action(GoogleMapController c)) {
-  if (lat == 0.0) {
-    return Text("Pas de localisation");
-  } else {
-    return Container(
-      height: 320,
-      width: MediaQuery.of(context).size.width,
-      child: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(0.0, 0.0) ?? LatLng(lat, long),
-          zoom: 14.4746,
-        ),
-        onMapCreated: action,
-        markers: Set.from(m),
+  return Container(
+    height: 320,
+    width: MediaQuery.of(context).size.width,
+    child: GoogleMap(
+      mapType: MapType.normal,
+      initialCameraPosition: CameraPosition(
+        target: LatLng(0.0, 0.0) ?? LatLng(lat, long),
+        zoom: 14.4746,
       ),
-    );
-  }
+      onMapCreated: action,
+      markers: Set.from(m),
+    ),
+  );
 }
 
 // Ceci est un widget qui represente un evenement
@@ -105,11 +101,18 @@ Widget event(void action(GoogleMapController c), List<Marker> m, Event e,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           SizedBox(
-                            child: AutoSizeText("    De : " + e.dateDebut,
+                            child: AutoSizeText(
+                                "    De : " +
+                                    DateFormat('dd-MM-yyyy hh:mm:ss')
+                                        .format(DateTime.parse(e.dateDebut)),
                                 style: Theme.of(context).textTheme.bodyText2),
                           ),
                           SizedBox(
-                            child: AutoSizeText("A : " + e.dateFin + "    ",
+                            child: AutoSizeText(
+                                "A : " +
+                                    DateFormat('dd-MM-yyyy hh:mm:ss')
+                                        .format(DateTime.parse(e.dateFin)) +
+                                    "    ",
                                 style: Theme.of(context).textTheme.bodyText2),
                           ),
                         ],
@@ -356,6 +359,10 @@ String typeOrNot(String type) {
   if (a.contains(type.toString())) {
     return type;
   } else {
+    var z = idTypeToNom(type);
+    if (a.contains(z)) {
+      return z;
+    }
     return "Autre";
   }
 }
@@ -397,7 +404,7 @@ Widget eventItem(Event e, BuildContext context, String person) {
                           ),
                           SizedBox(height: 10.0),
                           SizedBox(
-                            child: AutoSizeText(e.lieu,
+                            child: AutoSizeText(e.lieu ?? "!!",
                                 style: Theme.of(context).textTheme.bodyText1),
                           ),
                           SizedBox(height: 15.0),
@@ -412,7 +419,7 @@ Widget eventItem(Event e, BuildContext context, String person) {
                         SizedBox(
                           child: AutoSizeText(
                               'De: ' +
-                                  DateFormat('y/M/d')
+                                  DateFormat('d/M/y')
                                       .format(DateTime.parse(e.dateDebut)),
                               style: Theme.of(context).textTheme.bodyText1),
                         ),
@@ -420,7 +427,7 @@ Widget eventItem(Event e, BuildContext context, String person) {
                         SizedBox(
                           child: AutoSizeText(
                               '  A: ' +
-                                  DateFormat('y/M/d')
+                                  DateFormat('d/M/y')
                                       .format(DateTime.parse(e.dateFin)),
                               style: Theme.of(context).textTheme.bodyText1),
                         ),
@@ -786,7 +793,7 @@ addEventsTest(String token) async {
       "MUSEE NATIONAL DU MOUJAHID",
       "Ouvert en 1984, le musée retrace les différentes luttes en consacrant une bonne partie de ses collections à la lutte contre la présence française et à la guerre dAlgérie : expositions darmes, objets de guerre, documents darchives, photos, rapports, le plus souvent accompagnées détiquettes explicatives en arabe. Vous découvrirez notamment de nombreux objets personnels et armes ayant appartenu à lémir Abdelkader ainsi quun portrait de lui peint en 1853 par Ange Tissier, remis au pays par la France en 1976. Parmi les objets les plus intéressants : léventail avec lequel le dey Hussein a souffleté le consul de France en 1827, ce qui aurait provoqué la prise dAlger par les Français en 1830. Une visite intéressante pour confronter les points de vue... Au sous-sol du musée se trouve la crypte.\nOuvert tous les jours de De 9h à 16h45. Entrée 20 DA.",
       '2020-09-01 09:00:00',
-      '2020-12-23 21:00:00',
+      '2020-12-23 16:45:00',
       new Position(latitude: 36.742848, longitude: 3.070210),
       "900",
       "payant",
@@ -817,7 +824,7 @@ addEventsTest(String token) async {
       new Position(latitude: 36.362784, longitude: 6.606032),
       "200",
       "gratuit",
-      "5",
+      "8",
       "5",
       "ijdls",
       "sjdjsd",
@@ -871,7 +878,7 @@ addEventsTest(String token) async {
       new Position(latitude: 36.762076, longitude: 2.923454),
       "900",
       "payant",
-      "5",
+      "3",
       "5",
       "ijdls",
       "sjdjsd",
@@ -898,7 +905,7 @@ addEventsTest(String token) async {
       new Position(latitude: 36.730020, longitude: 3.031236),
       "300",
       "payant",
-      "5",
+      "1",
       "5",
       "ijdls",
       "sjdjsd",
@@ -925,7 +932,7 @@ addEventsTest(String token) async {
       new Position(latitude: 36.737898, longitude: 2.930429),
       "1200",
       "payant",
-      "5",
+      "1",
       "5",
       "ijdls",
       "sjdjsd",

@@ -181,7 +181,7 @@ class MyHomePageState extends State<MyHomePage> {
               height: 2,
             ),
             Container(
-                height: MediaQuery.of(context).size.height * 0.75,
+                height: MediaQuery.of(context).size.height * 0.8,
                 child: listEvent(uic, context, "Participer")),
             SizedBox(height: 7),
           ],
